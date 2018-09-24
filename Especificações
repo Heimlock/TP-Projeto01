@@ -15,6 +15,6 @@
 
 3)  Atendente
     -   Cadastro por Função; Dados Importados de um JSON;
-    -   Aloca|Disaloca Cliente em Quartos
+    -   Aloca|Desaloca Cliente em Quartos
     -   Verifica Disponibilidade de Quartos
     -   Reserva Quartos se Disponível
