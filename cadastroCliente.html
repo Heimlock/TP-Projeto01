@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang = "pt-br">
+    <head>
+        <script type = "text/javascript" src = "javascripts/"></script>
+		<link rel = "stylesheet" type = "text/css" href = "stylesheets/">
+		<meta name = "viewport" content = "width = device-width, scale = 1">
+		<meta charset = "utf-8">
+        <title>Cadastro de Cliente</title>
+    </head>
+
+    <body>
+        <form name = "formCliente" autocomplete = "off" method="post">
+            <h1> Cadastro de Cliente </h1>
+            <h3> Nome:               </h3>
+            <h3> CPF:                </h3>
+            <h3> Data de Nascimento: </h3>
+            <h3> Gênero:             </h3>
+            <h3> Endereço:           </h3>
+            <h3> CEP:                </h3>
+            <h3> Cidade:             </h3>
+            <h3> Estado:             </h3>
+            <h3> E-mail:             </h3>      
+            <h3> Telefone:           </h3> 
+            <h3> Motivo da Viagem:   </h3>
+                       
+            <input type = "text"    name = "nome" placeholder = "Digite seu nome" required>                                                                                   <br/>
+            <input type = "text"    name = "cpf"  placeholder = "Digite seu CPF no formato 999.999.999-99" pattern = "[0-9]{3}[.][0-9]{3}[.][0-9]{3}[-][0-9]{2}" required>    <br/>
+            
+            <input type = "date"    name = "data">                           <br/>
+            <input type = "radio"   name = "sexo" value = "masc"> Masculino    
+            <input type = "radio"   name = "sexo" value = "fem"> Feminino    <br/>
+            
+            <input type = "text"    name = "end"    placeholder = "Digite seu endereço" required>                                                   <br/>
+            <input type = "text"    name = "cep"    placeholder = "Digite seu CEP no formato 99999.999" pattern = "[0-9]{5}[-][0-9]{3}" required>   <br/>
+            <input type = "text"    name = "cidade" placeholder = "Digite sua cidade" required>                                                     <br/>
+
+            <select name = "estado">
+                    <option value="AC">Acre</option>
+                    <option value="AL">Alagoas</option>
+                    <option value="AP">Amapá</option>
+                    <option value="AM">Amazonas</option>
+                    <option value="BA">Bahia</option>
+                    <option value="CE">Ceará</option>
+                    <option value="DF">Distrito Federal</option>
+                    <option value="ES">Espírito Santo</option>
+                    <option value="GO">Goiás</option>
+                    <option value="MA">Maranhão</option>
+                    <option value="MT">Mato Grosso</option>
+                    <option value="MS">Mato Grosso do Sul</option>
+                    <option value="MG">Minas Gerais</option>
+                    <option value="PA">Pará</option>
+                    <option value="PB">Paraíba</option>
+                    <option value="PR">Paraná</option>
+                    <option value="PE">Pernambuco</option>
+                    <option value="PI">Piauí</option>
+                    <option value="RJ">Rio de Janeiro</option>
+                    <option value="RN">Rio Grande do Norte</option>
+                    <option value="RS">Rio Grande do Sul</option>
+                    <option value="RO">Rondônia</option>
+                    <option value="RR">Roraima</option>
+                    <option value="SC">Santa Catarina</option>
+                    <option value="SP">São Paulo</option>
+                    <option value="SE">Sergipe</option>
+                    <option value="TO">Tocantins</option>
+            </select> <br/>
+            
+            <input type = "email"   name = "email" placeholder = "Digite seu email">                                                                                    <br/>
+            <input type = "tel"     name = "tel"   placeholder = "Digite seu telefone no formato (99) 9999-9999" pattern = "[(][0-9]{2}[)][\s][0-9]{4}[-][0-9]{4}">     <br/>
+
+            <input type = "checkbox" name = "motivo" value = "F">            <br/> 
+			<input type = "checkbox" name = "motivo" value = "N">            <br/>
+			<input type = "checkbox" name = "motivo" value = "C">            <br/>
+			<input type = "checkbox" name = "motivo" value = "E">	 		 <br/>
+			<input type = "checkbox" name = "motivo" value = "S">   	     <br/>
+			<input type = "checkbox" name = "motivo" value = "O"> Outro	     <br/>
+			
+            <input type = "reset" value = "Limpar"> |
+            <input type = "submit" value = "Confirmar">                            
+        </form>
+    </body>
+</html>
