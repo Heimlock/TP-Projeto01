@@ -1,9 +1,2 @@
 
-./app.js
-./sessions
-./package-lock.json
-./package.json
-
 node_modules/
-views/
-bin/
