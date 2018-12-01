@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Admin Control</title>
+
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="bower_components/Ionicons/css/ionicons.min.css">
+  
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+  <link rel="stylesheet" href="dist/css/skins/skin-blue.min.css">
+
+  <!-- Google Font -->
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+
+  <!-- REQUIRED JS SCRIPTS -->
+  <!-- jQuery 3 -->
+  <script src="bower_components/jquery/dist/jquery.min.js"></script>
+  <!-- Bootstrap 3.3.7 -->
+  <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+  <!-- AdminLTE App -->
+  <script src="dist/js/adminlte.min.js"></script>
+  <!-- InputMask -->
+  <script src="https://rawgit.com/RobinHerbots/Inputmask/3.x/dist/jquery.inputmask.bundle.js"></script>
+  <!-- MomentJS -->
+  <script type="text/javascript" src="../javascripts/moment.js"></script>
+
+  <!-- System Control -->
+  <script type="text/javascript" src="../javascripts/acesso.js"></script>
+  <script type="text/javascript" src="../javascripts/cliente.js"></script>
+  <script type="text/javascript" src="../javascripts/gerencia.js"></script>
+  <script type="text/javascript" src="../javascripts/info.js"></script>
+  <script type="text/javascript" src="../javascripts/reservas.js"></script>
+  <script type="text/javascript" src="../javascripts/quartos.js"></script>
+
+  <!-- Initial Scripts -->
+  <script>
+    $(document).ready(
+      verifAdmin(),
+      getUserData( function( dados ){
+        console.log(dados);
+        document.getElementById("adm_name").innerHTML = dados.data.Nome;
+        // IMG
+      } )
+    );
+  </script>
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+
+  <!-- Main Header -->
+  <header class="main-header">
+
+    <!-- Logo -->
+    <a href="index.html" class="logo">
+      <!-- mini logo for sidebar mini 50x50 pixels -->
+      <span class="logo-mini"><b>ADM</b></span>
+      <!-- logo for regular state and mobile devices -->
+      <span class="logo-lg"><b>Admin</b> Panel</span>
+    </a>
+
+    <!-- Header Navbar -->
+    <nav class="navbar navbar-static-top" role="navigation">
+      <!-- Sidebar toggle button-->
+      <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+        <span class="sr-only">Toggle navigation</span>
+      </a>
+      
+      <!-- Navbar Right Menu -->
+      <div class="navbar-custom-menu">
+        <ul class="nav navbar-nav">
+          <!-- LogOut Button -->
+          <li>
+            <a onClick="logoutUsuario();"><i class="glyphicon glyphicon-log-out"></i></a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+  
+  <!-- Left side column. contains the logo and sidebar -->
+  <aside class="main-sidebar">
+
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+
+      <!-- Sidebar user panel (optional) -->
+      <div class="user-panel">
+        <div class="pull-left image">
+          <img id="adm_img" class="img-circle" src="dist/img/user2-160x160.jpg" alt="User Image">
+        </div>
+        <div class="pull-left info">
+          <p id="adm_name">John Doe</p>
+        </div>
+      </div>
+
+      <!-- Sidebar Menu -->
+      <ul class="sidebar-menu" data-widget="tree">
+        <!-- <li class="header">HEADER</li> -->
+        
+        <!-- SideBar Options -->
+        <li><a href="./dashboard.html"><i class="fa fa-bar-chart"></i> <span>DashBoard</span></a></li>
+        <!-- <li><a href="#"><i class="fa fa-calendar-check-o"></i> <span>Reservas</span></a></li> -->
+        <!-- <li><a href="#"><i class="fa fa-calendar-check-o"></i> <span>Reservas</span></a></li> -->
+
+        <!-- SideBar Submenu Reservas -->
+        <li class="treeview">
+          <a href="#"><i class="fa fa-calendar-check-o"></i> <span>Reservas</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="./listarReservas.html">Verificar Reservas</a></li>
+            <!-- <li><a href="./aprovarReservas.html">Aprovar Reserva</a></li> -->
+            <li><a href="./novaReserva.html">Nova Reserva</a></li>
+            <li><a href="./fecharReserva.html">Fechar Reserva</a></li>
+          </ul>
+        </li>
+
+        <!-- SideBar Submenu Clientes -->
+        <li class="treeview">
+          <a href="#"><i class="fa fa-users"></i> <span>Clientes</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="./listarClientes.html">Listar Clientes</a></li>
+            <li><a href="./novoCliente.html">Novo Cliente</a></li>
+          </ul>
+        </li>
+
+        <!-- SideBar Submenu Quartos -->
+        <li class="treeview active">
+          <a href="#"><i class="glyphicon glyphicon-bed"></i> <span>Quartos</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="./listarQuartos.html">Listar Quartos</a></li>
+            <li class="active"><a href="./novoQuarto.html">Novo Quarto</a></li>
+          </ul>
+        </li>
+        <li ><a onClick="logoutUsuario();"><i class="fa fa-sign-out"></i> <span>LogOut</span></a></li>
+      </ul>
+      <!-- /.sidebar-menu -->
+    </section>
+    <!-- /.sidebar -->
+  </aside>
+
+  <!-- Content Wrapper. Contains page content -->
+  <!-- Conteúdo -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Novo Quarto
+        <!-- <small>Optional description</small> -->
+      </h1>
+      <ol class="breadcrumb">
+        <li><i class="glyphicon glyphicon-bed"></i> Quartos</li>
+        <li class="active">Novo Quarto</li>
+      </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content container-fluid">
+
+      <!--------------------------
+        | Your Page Content Here |
+        -------------------------->
+        <div class="row col-md-10">
+            <form role="form" name="formQuarto"  method="post">
+                <!-- box-body -->
+                <div class="box-body">
+                  <!-- ID, QntCamas, Titulo, Descricao, Preco -->
+                    <!-- Titulo -->
+                    <div class="form-group col-md-12">
+                        <label for="titulo">Titulo</label>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-bed"></i></span>
+                            <input id="titulo" type="text" class="form-control">
+                        </div>
+                    </div>
+                    
+                    <!-- Preço & QntCamas -->
+                    <div class="form-row">
+                      <div class="form-group col-md-6">
+                          <label for="preco">Preço</label>
+                          <div class="input-group">
+                              <span class="input-group-addon"><i class="glyphicon glyphicon-usd"></i></span>
+                              <input id="preco" type="text" class="form-control">
+                          </div>
+                      </div>
+
+                      <div class="form-group col-md-6">
+                          <label for="qntCamas">Número de Camas</label>
+                          <div class="input-group">
+                              <span class="input-group-addon"><i class="fa fa-bed"></i></span>
+                              <input id="qntCamas" class="form-control" type="text">
+                          </div>
+                      </div>
+                    </div>
+
+                    <!-- Descricao -->
+                    <div class="form-group col-md-12">
+                      <label for="descricao">Descrição</label>
+                      <textarea class="form-control" id="descricao" rows="4" style="resize:none" maxlength="200"></textarea>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onClick="salvaQuarto();">Salvar</button>
+                </div>    
+                <script id="inputMask">
+                    $("#preco").inputmask({
+                    mask: ["99.99", "999.99", ],
+                    keepStatic: true
+                    });
+                </script>
+            </form>      
+ 
+        </div>
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+  <!-- Main Footer -->
+  <footer class="main-footer">
+    <!-- Default to the left -->
+    <strong>Copyright &copy; 2018 <a href="#">Hotel X</a>.</strong> All rights reserved.
+  </footer>
+</div>
+<!-- ./wrapper -->
+
+</body>
+</html>
