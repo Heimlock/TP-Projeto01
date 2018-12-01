@@ -21,6 +21,7 @@
     <link href="css/flaticon.css" rel="stylesheet">
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
+    <link href="stylesheets/style.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -31,32 +32,31 @@
   </head>
   <body>
 
-    <!-- Preloader -->
+    <!-- Preloader --> 
     <div class="preloader">
       <div class="table">
         <div class="inner">
-          <h5 class="preloader-text">LOADING PLEASE WAIT</h5>
-          <img src="images/preloader.gif" alt="Image" class="preloader-img"> </div> <!-- end inner --> 
+          <h5 class="preloader-text">CARREGANDO A PÁGINA</h5>
+          <img src="images/preloader.gif" alt="Image" class="preloader-img"> 
+        </div> <!-- end inner --> 
       </div> <!-- end table --> 
     </div> <!-- end preloader -->
 
     <!-- Navigation -->
     <aside class="navigation">
+      <div class="top">Bem Vindo ao Black Onyx Hostel</div> <!-- end top -->
 
-      <div class="top">Welcome to The Quarto</div> <!-- end top -->
-      
       <div class="table">
         <div class="inner">
-          <ul class="footer-menu">
+          <ul id='menu'>
             <li><a href="index.html">HOME</a></li>
             <li><a href="tipos_quartos.html">QUARTOS</a></li>
-            <li><a href="descricao_hotel.html">O HOTEL</a></li>
+            <li><a href="descricao_hotel.html">O HOSTEL</a></li>
           </ul>
         </div> <!-- end inner --> 
       </div> <!-- end table -->
 
-      <div class="bottom">© 2017 The Quarto. All rights reserved.</div> <!-- end bottom --> 
-    
+      <div class="bottom">© 2018 Black Onyx. Todos os direitos reservados.</div> <!-- end bottom -->
     </aside> <!-- end navigation -->
     
      <!-- Lateral Esquerda -->
@@ -64,13 +64,42 @@
       <div class="hamburger-menu"> <span></span> <span></span> <span></span> </div> <!-- end hamburger-menu -->
     </aside> <!-- end main-side -->
 
-     <!-- Parte de Cima -->
+    <!-- Parte de cima, topbar, header --> 
     <header class="int-header">
       <div class="topbar">
-        <a href="index-2.html"><img src="images/logo-light.png" alt="Image" class="logo"></a>
-        <a href="#" class="reservation">LOGIN</a>
+        <a href="index.html"><img src="images/logo-light.png" alt="Image" class="logo"></a>
+        <a id="login"  class="reservation" onclick='$("#login-modal").modal()' >LOGIN</a>
       </div> <!-- end topbar -->
     </header> <!-- end header -->
+
+    <!-- Modal Login -->
+    <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+      <div class="modal-dialog">  
+          <div class="row" id="pwd-container">
+              <div class="col-md-6 col-md-offset-3">
+                  <section class="login-form">
+                      <form method="post" name="formLogin" action="#" role="login">
+                          <img src="./ico/apple-touch-icon-114-precomposed.png" class="img-responsive" alt="" />
+                          <center> 
+                              <h3>Login</h3>
+                          </center>
+                          
+                          <input id="login" type="text" class="form-control input-lg" name="login" placeholder="Login" required/>
+
+                          <input id="senha" type="password" class="form-control input-lg" placeholder="Senha" required />
+                          <input class="btn btn-lg btn-primary btn-block" type="button" value="ENTRAR" name="bt_login" onClick="loginUsuario();">
+                          <div>
+                              <a href="#"> Nova Conta </a>
+                              <br>
+                              <a href="#"> Esqueceu a Senha? </a>
+                          </div>
+                      </form>
+                  </section>  
+              </div>
+          </div>
+      </div>
+    </div>
+    <!-- End Modal Login -->
 
      <!-- Parte Central -->
     <section class="room-detail">
@@ -223,13 +252,37 @@
     </footer> <!-- end footer --> 
 
     <!-- JS FILES --> 
+    <script type="text/javascript" src="javascripts/acesso.js"></script>
+    <script type="text/javascript" src="javascripts/gerencia.js"></script>
     <script src="js/jquery.min.js"></script> 
     <script type="text/javascript">
-    (function($) {
-      $(window).load(function(){
-        $("body").addClass("page-loaded");	
+      (function($) {
+        $(window).load(function(){
+          $("body").addClass("page-loaded");	
+        });
+      })(jQuery)
+      $(document).ready(function () {
+          verifyStatus(
+              function( dados )
+              {
+                  if( dados.status === 'OK' )
+                  {
+                      //  Ou Modal Cliente
+                      document.getElementById("login").onclick    = function(){logoutUsuario()};
+                      document.getElementById("login").innerHTML  = "LOGOUT";
+                      adminMode(
+                        function({status, data})
+                        {
+                          if( status === 'OK' )
+                          {
+                            document.getElementById("menu").innerHTML  += `<li><a href="./admin/index.html">ADMIN PANEL</a></li>`;
+                          }
+                        }
+                      );
+                  }
+              }
+          );
       });
-    })(jQuery)
     </script> 
     <script src="js/bootstrap.min.js"></script> 
     <script src="js/bootstrap-datepicker.min.js"></script> 
