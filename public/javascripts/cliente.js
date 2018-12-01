@@ -1,4 +1,4 @@
-    
+
     function exibeClientes(clientes) {
         for (var i = 0; i < clientes.length; i++)
         {
@@ -14,14 +14,14 @@
                                 `<td>${dataNasc}</td>`  +
                                 `<td>${telefone}</td>`  +
                                 // `<td>${cliente.Motivo}</td>`    +
-                                `<td>`      + 
+                                `<td>`      +
                                 `<a data-toggle="modal" data-target="#profile-modal" onClick="getClientData(${cliente.ID}, fillFormCliente)">Perfil</a>` +
                                 `</td>`     +
                                 `</tr>`;
             document.getElementById('result').innerHTML += dadosCliente;
         }
     }
-    
+
     function alterarEstadoCliente( ID )
     {
         var elements    =   document.getElementsByClassName("form-control"),
@@ -39,7 +39,7 @@
         if( elements[0].readOnly == false )
         {
             btn_toggle.innerHTML    =   "Submeter";
-            btn_toggle.setAttribute('onClick',`editaCliente(${ID});`);
+            btn_toggle.setAttribute('onClick',`salvaCliente(${ID});`);
         }
         else
         {
@@ -49,19 +49,13 @@
 
     }
 
-    function editaCliente( ID )
-    {
-        salvaCliente(ID);
-        getClientData(ID, fillFormCliente);
-    }
-
     function fillFormCliente( {status, data} )
     {
         var elements    =   document.getElementsByClassName("form-control"),
             btn_toggle  =   document.getElementById("btn_alterar"),
             form        =   document.formPerfilCliente,
             i;
-        const   {   ID, Nome, Cpf, DataNasc, Sexo, Cep, Endereco, 
+        const   {   ID, Nome, Cpf, DataNasc, Sexo, Cep, Endereco,
                     Cidade, Estado, Email, Telefone }    =  data[0];
 
         //  PreSets
@@ -81,7 +75,7 @@
         form.estado.value   =   Estado;
         form.email.value    =   Email;
         form.telefone.value =   Telefone;
-        getCurrEstadia( ID, function ( { status, data } )
+        getCurrEstadia( Cpf, function ( { status, data } )
         {
             if( data.length != 0 )
             {
@@ -98,10 +92,10 @@
         });
     }
 
-    function getCurrEstadia( id, callback )
+    function getCurrEstadia( cpf, callback )
     {
         $.ajax({
-            url: `/reservas/estadiaCliente?ID=${id}`,
+            url: `/reservas/estadiaCliente?CPF=${cpf}`,
             dataType:"json",
             error: function (dados) {
                                         alert('Erro: ' + dados.data);
@@ -109,8 +103,12 @@
             success: function (dados) {
                                         if (dados.status === 'ERRO')
                                             alert('Erro: ' + dados.data);
-                                        callback(dados);
+                                        else
+                                        {
+                                          // console.log(dados);
+                                          callback(dados);
                                         }
+                                      }
         });
     }
 
@@ -137,14 +135,14 @@
                                         callback(dados);
                                         }
         });
-        // $.ajax({    
+        // $.ajax({
         //     url: '/cliente/listaCliente?id=' + id,
         //     dataType: 'json',
         //     type: 'post',
         //     error: function (dados) {
         //             alert('Erro: ' + dados.data);
         //             },
-        //     success: function (dados) 
+        //     success: function (dados)
         //         {
         //             if(dados.status === 'ERRO')
         //                 alert('Erro: ' + dados.data);
@@ -172,31 +170,26 @@
 
     function salvaCliente() {
         var form    = document.formPerfilCliente,
-            cpf     = form.cpf.value, 
-            telefone= form.telefone.value, 
-            cep     = form.cep.value, 
+            cpf     = form.cpf.value,
+            telefone= form.telefone.value,
+            cep     = form.cep.value,
             input,
             param = new URLSearchParams( window.location.search ),
             urlAcao;
-            
-        if( param.has('ID') )
-        {   //  Alteração por URl
-//  TODO
-            // urlAcao =   '/cliente/altera?ID=' + param.get('ID');
-        }
-        else if( arguments.length != 0 )
+
+        if( arguments.length != 0 )
         {   //  Alteração por Argumento
             urlAcao =   `/cliente/altera?ID=${arguments[0]}`;
             input   =   {
                 Nome:       form.nome.value,
                 Cpf:        ( cpf.slice(0,3) + cpf.slice(4,7) + cpf.slice(8,11) + cpf.slice(12,14) ),
                 DataNasc:   form.dataNasc.value,
-                Sexo:       ((form.sexo.value == 'Masculino') ? "M" : "F"), 
-                Cep:        ( cep.slice(0,5) + cep.slice(6,10) ), 
-                Endereco:   form.endereco.value, 
-                Cidade:     form.cidade.value, 
-                Estado:     form.estado.value, 
-                Email:      form.email.value, 
+                Sexo:       ((form.sexo.value == 'Masculino') ? "M" : "F"),
+                Cep:        ( cep.slice(0,5) + cep.slice(6,10) ),
+                Endereco:   form.endereco.value,
+                Cidade:     form.cidade.value,
+                Estado:     form.estado.value,
+                Email:      form.email.value,
                 Telefone:   ( telefone.slice(1,3) + telefone.slice(5,10) + telefone.slice(11,15) )
             };
         }
@@ -210,13 +203,13 @@
                     Nome:       form.nome.value,
                     Cpf:        ( cpf.slice(0,3) + cpf.slice(4,7) + cpf.slice(8,11) + cpf.slice(12,14) ),
                     DataNasc:   form.dataNasc.value,
-                    Sexo:       ((form.sexo.value == 'Masculino') ? "M" : "F"), 
+                    Sexo:       ((form.sexo.value == 'Masculino') ? "M" : "F"),
                     Senha:      form.senha.value,
-                    Cep:        ( cep.slice(0,5) + cep.slice(6,10) ), 
-                    Endereco:   form.endereco.value, 
-                    Cidade:     form.cidade.value, 
-                    Estado:     form.estado.value, 
-                    Email:      form.email.value, 
+                    Cep:        ( cep.slice(0,5) + cep.slice(6,10) ),
+                    Endereco:   form.endereco.value,
+                    Cidade:     form.cidade.value,
+                    Estado:     form.estado.value,
+                    Email:      form.email.value,
                     Telefone:   ( telefone.slice(1,3) + telefone.slice(5,10) + telefone.slice(11,15) )
                 };
             }
@@ -227,10 +220,10 @@
             }
         }
 
-        getClientExists(( cpf.slice(0,3) + cpf.slice(4,7) + cpf.slice(8,11) + cpf.slice(12,14) ), 
+        getClientExists(( cpf.slice(0,3) + cpf.slice(4,7) + cpf.slice(8,11) + cpf.slice(12,14) ),
         function ({status, data}){
             console.log("status: " + status + " , Data: " + data);
-            if( data.length != 0 )
+            if( (data.length != 0) && (arguments.length == 0) )
             {
                 alert("Cliente já cadastrado");
                 return;
@@ -251,17 +244,17 @@
                                                 {
                                                     alert(dados.data);
                                                     window.location.reload();
-                                                }    
+                                                }
                                                 }
                 });
             }
         });
     }
-    
+
     function listarCliente( callback )
     {
         $(document).ready(function () {
-            $.ajax({    
+            $.ajax({
                 url: '/cliente/lista',
                 dataType: 'json',
                 error: function (dados) {
@@ -287,14 +280,14 @@
 
     // OLD
     function deletaCliente( id ) {
-        $.ajax({    
+        $.ajax({
             url: '/cliente/deleta?ID=' + id,
             dataType: 'json',
             type: 'post',
             error: function (dados) {
                     alert('Erro: ' + dados.data);
                     },
-            success: function (dados) 
+            success: function (dados)
                 {
                     if(dados.status === 'ERRO')
                         alert('Erro: ' + dados.data);

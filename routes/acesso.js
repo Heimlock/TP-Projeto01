@@ -28,11 +28,11 @@ var router = express.Router();
                 }
                 else
                 {
-                    console.log("login:" + rows[0].login);
+                    // console.log("login:" + rows[0].login);
                     req.session.logado  =   true;
                     req.session.login   =   rows[0].login;
 
-                    res.json({  status: 'OK', 
+                    res.json({  status: 'OK',
                                 data:   'Logado com sucesso!'
                             });
                 }
@@ -45,13 +45,13 @@ var router = express.Router();
         req.getConnection(function (err, connection){
             if (req.session.logado)
             {
-                res.json({  status: 'OK', 
+                res.json({  status: 'OK',
                             data:   req.session.login
                         });
             }
             else
             {
-                res.json({  status: 'ERRO', 
+                res.json({  status: 'ERRO',
                             data:   'Usuário não efetuou o Login'
                         });
             }
@@ -76,8 +76,8 @@ var router = express.Router();
                     }
                     else
                     {
-                        console.log("login:" + rows[0]);
-                        res.json({  status: 'OK', 
+                        // console.log("login:" + rows[0]);
+                        res.json({  status: 'OK',
                                     data:   rows[0]
                                 });
                     }
@@ -136,7 +136,7 @@ var router = express.Router();
 
                     req.session.logado  =   true;
                     req.session.login   =   rows[0].login;
-                    res.json({  status: 'OK', 
+                    res.json({  status: 'OK',
                                 data:   'Cliente - Logado com sucesso!'
                             });
                 }
@@ -151,7 +151,7 @@ var router = express.Router();
         req.getConnection(function (err, connection){
         // var queryCliente    =   "SELECT * FROM Clientes WHERE CPF='" + input.login + "' AND Senha='" + input.senha + "'";
         var queryGerente    =   "SELECT * FROM Gerentes WHERE Usuario='" + input.login + "' AND Senha='" + input.senha + "'";
-        
+
         connection.query(queryGerente, function (err, rows){
             if (err)
                 res.json({ status: 'ERRO', data: + err });
@@ -169,7 +169,7 @@ var router = express.Router();
 
                     req.session.logado  =   true;
                     req.session.login   =   rows[0].login;
-                    res.json({  status: 'OK', 
+                    res.json({  status: 'OK',
                                 data:   'Gerente - Logado com sucesso!'
                             });
                 }
@@ -181,11 +181,11 @@ var router = express.Router();
     router.post('/logout', function (req, res, next){
         req.session.destroy(function (err){
             if (err)
-                res.json({  status: 'ERRO', 
-                            data:   + err 
+                res.json({  status: 'ERRO',
+                            data:   + err
                         });
             else
-                res.json({  status: 'OK', 
+                res.json({  status: 'OK',
                             data:   'Logout com sucesso!'
                         });
         });

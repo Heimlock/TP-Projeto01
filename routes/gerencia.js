@@ -3,7 +3,7 @@ var router = express.Router();
 
     router.get('/verifyAdmin', function (req, res, next){
         req.getConnection(function (err, connection){
-            console.log("Login:" + req.session.login);
+            // console.log("Login:" + req.session.login);
         var queryGerente    =   "SELECT * FROM Gerentes WHERE Usuario='" + req.session.login + "'";
         connection.query(queryGerente, function (err, rows){
             if (err)
@@ -18,7 +18,7 @@ var router = express.Router();
                 }
                 else
                 {
-                    res.json({  status: 'OK', 
+                    res.json({  status: 'OK',
                                 data:   'Acesso Permitido!'
                             });
                 }
@@ -30,11 +30,11 @@ var router = express.Router();
     // router.post('/logout', function (req, res, next){
     //     req.session.destroy(function (err){
     //         if (err)
-    //             res.json({  status: 'ERRO', 
-    //                         data:   + err 
+    //             res.json({  status: 'ERRO',
+    //                         data:   + err
     //                     });
     //         else
-    //             res.json({  status: 'OK', 
+    //             res.json({  status: 'OK',
     //                         data:   'Logout com sucesso!'
     //                     });
     //     });

@@ -1,9 +1,9 @@
 
-// COD, ID_Cliente, ID_Quarto, DataEntrada, PrevSaida, Motivo
+// COD, ID_Cliente, ID_Quarto, qntCamas, DataEntrada, PrevSaida, Motivo
 
 function exibeReservas(reservas)
 {
-    var reserva, cpfSTR, cpf, dataIN, dataOUT, dadosReserva;
+    var reserva, cliente, cpfSTR, cpf, dataIN, dataOUT, motivoSTR, dadosReserva;
     document.getElementById('result').innerHTML =   "";
 
     function innerSearch( id, clientes )
@@ -13,26 +13,35 @@ function exibeReservas(reservas)
             if( clientes[i].ID == id ) return i;
         return -1;
     }
-    listarCliente( 
+    listarCliente(
         function ( clientes )
         {
             for (var i = 0; i < reservas.length; i++)
             {
                 reserva =   reservas[i];
-                // console.log(`Cliente[${i}] = ` + clientes[innerSearch(reserva.ID_Cliente, clientes)].Cpf );
-                cpf     =   clientes[innerSearch(reserva.ID_Cliente, clientes)].Cpf;
+                cliente =   clientes[innerSearch(reserva.ID_Cliente, clientes)];
+                cpf     =   cliente.Cpf;
                 cpfSTR  =  ( cpf.slice(0,3) + '.' + cpf.slice(3,6) + '.' + cpf.slice(6,9) + '-' + cpf.slice(9,11) );
-                // COD, ID_Cliente, ID_Quarto, DataEntrada, PrevSaida, Motivo
                 dataIN  =  ( reserva.DataEntrada.slice(0,10).slice(8,10) + '/' + reserva.DataEntrada.slice(0,10).slice(5,7) + '/' + reserva.DataEntrada.slice(0,10).slice(0,4) );
                 dataOUT =  ( reserva.PrevSaida.slice(0,10).slice(8,10)   + '/' + reserva.PrevSaida.slice(0,10).slice(5,7)   + '/' + reserva.PrevSaida.slice(0,10).slice(0,4) );
+
+                if( reserva.Motivo === 'F' )        motivoSTR = "Férias";
+                else if ( reserva.Motivo === 'N' )  motivoSTR = "Negócios";
+                else if ( reserva.Motivo === 'C' )  motivoSTR = "Congresso";
+                else if ( reserva.Motivo === 'E' )  motivoSTR = "Estudos";
+                else if ( reserva.Motivo === 'S' )  motivoSTR = "Saúde";
+                else                                motivoSTR = "Outro";
+
                 dadosReserva =  `<tr id="${reserva.COD}">`          +
                                 `<td>${reserva.COD}</td>`           +
-                                `<td>${cpfSTR}</td>`    +
+                                `<td>${cliente.Nome}</td>`          +
+                                `<td>${cpfSTR}</td>`                +
                                 `<td>${reserva.ID_Quarto}</td>`     +
                                 `<td>${dataIN}</td>`                +
                                 `<td>${dataOUT}</td>`               +
-                                `<td>${reserva.Motivo}</td>`        +
-                                `<td>`      + 
+                                `<td>${reserva.qntCamas}</td>`      +
+                                `<td>${motivoSTR}</td>`             +
+                                `<td>`      +
                                 `<a data-toggle="modal" data-target="#info-modal" onClick="getReservaData(${reserva.COD}, fillFormReserva)">Info</a>` +
                                 `</td>`     +
                                 `</tr>`;
@@ -45,7 +54,7 @@ function exibeReservas(reservas)
 function    listarReservas( callback )
 {
     $(document).ready(function () {
-        $.ajax({    
+        $.ajax({
             url: '/reservas/lista',
             dataType: 'json',
             error: function (dados) {
@@ -88,7 +97,52 @@ function    getReservaData( COD, callback )
 
 function    fillFormReserva( {status, data} )
 {
-    console.log(data);
+    // COD, ID_Cliente, Cpf, NomeCliente, ID_Quarto, Titulo, qntCamas, DataEntrada, PrevSaida, Motivo
+    var form        =   document.formReserva,
+        motivoSTR;
+    const   { COD, ID_Cliente, Cpf, NomeCliente, ID_Quarto, Titulo,
+              qntCamas, DataEntrada, PrevSaida, Motivo }    =  data[0];
+
+
+    // Férias Negócios Congresso Estudos Saúde Outro
+    if( Motivo  === 'F' )       motivoSTR = "Férias";
+    else if ( Motivo === 'N' )  motivoSTR = "Negócios";
+    else if ( Motivo === 'C' )  motivoSTR = "Congresso";
+    else if ( Motivo === 'E' )  motivoSTR = "Estudos";
+    else if ( Motivo === 'S' )  motivoSTR = "Saúde";
+    else                        motivoSTR = "Outro";
+
+    form.nome.value     =   NomeCliente;
+    form.cpf.value      =   Cpf;
+    form.numQuarto.value=   ( (ID_Quarto < 10) ? ('0' + ID_Quarto) : (ID_Quarto) );
+    form.titulo.value   =   Titulo;
+    form.qntCamas.value =   qntCamas;
+    form.dataIN.value   =   DataEntrada.slice(0,10);
+    form.dataOUT.value  =   PrevSaida.slice(0,10);
+    form.motivo.value   =   motivoSTR;
+    calculaCusto(Cpf,
+      function({status, data})
+      {
+        form.preco.value   =   ((data[0].Custo > 0) ? (data[0].Custo) : ("0000"));
+      }
+    );
+}
+
+function    calculaCusto( CPF, callback )
+{
+  $.ajax({
+      url: `/reservas/custoEstadia?CPF=${CPF}`,
+      dataType:"json",
+      error: function (dados) {
+                                  alert('Erro: ' + dados.data);
+                              },
+      success: function (dados) {
+                                  if (dados.status === 'ERRO')
+                                      alert('Erro: ' + dados.data);
+                                  else
+                                  callback(dados);
+                                }
+  });
 }
 
 //  Disponibilidade
@@ -108,7 +162,7 @@ function    verifDisp()
                 },
         success: function (dados) {
                 if (dados.status === 'ERRO')
-                {    
+                {
                     console.log("Sucesso Erro: " + dados);
                     alert('Erro: ' + dados.data);
                 }
@@ -124,14 +178,14 @@ function    verifDisp()
 
 function    verifReserva( ID, callback )
 {
-    $.ajax({    
+    $.ajax({
         url: '/cliente/listaCliente?id=' + id,
         dataType: 'json',
         type: 'post',
         error: function (dados) {
                 alert('Erro: ' + dados.data);
                 },
-        success: function (dados) 
+        success: function (dados)
             {
                 if(dados.status === 'ERRO')
                     alert('Erro: ' + dados.data);

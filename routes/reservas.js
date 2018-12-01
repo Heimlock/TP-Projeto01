@@ -22,11 +22,29 @@ router.get('/lista', function (req, res, next) {
     }
 });
 
-// COD, ID_Cliente, ID_Quarto, DataEntrada, PrevSaida, Motivo
 router.get('/listaReserva', function(req, res, next){
-    var query   =   `SELECT E.COD as COD, C.ID as ID_Cliente, E.ID_Quarto as ID_Quarto,`            + 
-                    ` E.DataEntrada as DataEntrada, E.PrevSaida as PrevSaida, E.Motivo as Motivo`   + 
-                    ` FROM Estadia E, Clientes C WHERE E.COD=${req.query.COD} AND E.ID_Cliente=C.ID`;
+    var query   =   `SELECT E.COD as COD, C.ID as ID_Cliente, C.Cpf as Cpf, C.Nome as NomeCliente, `  +
+                    ` E.ID_Quarto as ID_Quarto, Q.Titulo as Titulo, E.qntCamas as qntCamas, `         +
+                    ` E.DataEntrada as DataEntrada, E.PrevSaida as PrevSaida, E.Motivo as Motivo`     +
+                    ` FROM Estadia E, Clientes C, Quartos Q WHERE E.COD=${req.query.COD} AND E.ID_Cliente=C.ID AND Q.ID=E.ID_Quarto`;
+    req.getConnection( function( err, connection ){
+        var conn = connection.query( query, function(err, rows){
+            if( err )
+                res.json({ status:'ERROR', data: err });
+            else
+                res.json({ status:'OK', data: rows });
+        });
+        if( err )
+        res.json({ status:'ERROR', data: err });
+    });
+});
+
+router.get('/custoEstadia', function(req, res, next){
+    var query   =   `SELECT	ROUND((E.qntCamas * Q.Preco * (TIMESTAMPDIFF(DAY, E.DataEntrada, NOW()))), 2) as Custo ` +
+                    ` FROM Estadia E, Clientes C, Quartos Q `                                           +
+                    ` WHERE E.ID_Cliente=C.ID AND E.ID_Quarto=Q.ID AND `                                +
+                    ` C.Cpf=${req.query.CPF} AND E.DataEntrada<NOW();`;
+
     req.getConnection( function( err, connection ){
         var conn = connection.query( query, function(err, rows){
             if( err )
@@ -75,10 +93,10 @@ router.post('/listaDisp', function(req, res, next){
 
 //  Listar Estadia Atual de Um dado Cliente
 router.get('/estadiaCliente', function(req, res, next){
-    // var query   = `SELECT ID, Nome, Cpf, DataNasc, Sexo, Cep, Endereco, Cidade, Estado, Email, Telefone, Motivo FROM Clientes WHERE ID=${req.query.ID}`;
-    // var query   =   `SELECT E.COD as COD, E.ID_Cliente as Cliente, E.ID_Cama as Cama, CQ.ID_Quarto as Quarto, DataEntrada as DataIN, `  +
-    //                 `PrevSaida as DataOUT, Motivo FROM Estadia E, CamasQuarto CQ WHERE CQ.ID_Cama=E.ID_Cama AND E.ID_Cliente=${req.query.ID}`;
-    var query       =   `SELECT * FROM Estadia WHERE ID_Cliente=${req.query.ID}`;
+    // COD, ID_Cliente, ID_Quarto, qntCamas, DataEntrada, PrevSaida, Motivo
+    var query       =   `SELECT E.COD as COD, E.ID_Cliente as ID_Cliente, E.ID_Quarto as ID_Quarto, E.qntCamas as qntCamas, `     +
+                        ` E.DataEntrada as DataEntrada, E.PrevSaida as PrevSaida, E.Motivo as Motivo FROM Estadia E, Clientes C ` +
+                        ` WHERE C.Cpf=${req.query.CPF} AND E.ID_Cliente=C.ID`
     req.getConnection( function( err, connection ){
         var conn = connection.query( query, function(err, rows){
             if( err )
