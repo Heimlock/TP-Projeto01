@@ -1,47 +1,65 @@
-body {
-  padding: 50px;
-  background-image: url("../images/cadastro/plano_fundo.jpg"); 
-  background-repeat: repeat;
-  background-size: cover;
+
+/* Modals */
+.modal-content  {
+  -webkit-border-radius: 20px !important;
+  -moz-border-radius: 20px !important;
+  border-radius: 20px !important; 
 }
 
-a {
-  color: #00B7FF;
-}
+/* LOGIN */
+    form[role=login]
+    {
+        color: #5d5d5d;
+        background: #f2f2f2;
+        padding: 26px;
+        border-radius: 10px;
+        -moz-border-radius: 10px;
+        -webkit-border-radius: 10px;
+    }
 
-.form h1{
-  font-family: Georgia;
-  font-size: 2.5em;
-  font-weight: bold;
-  text-align: center;
-  color: #ffffff;
-}
+    form[role=login] img
+    {
+        display: block;
+        margin: 0 auto;
+        margin-bottom: 35px;
+    }
 
-.form{
-  font-family: Courier;
-  font-size: 1.1em;
-  color: #ffffff;
-}
+    form[role=login] input,
+    form[role=login] button
+    {
+        font-size: 18px;
+        margin: 16px 0;
+    }
 
-.buttons{
-  margin-left: 25%;
-}
+    form[role=login] > div
+    {
+      text-align: center;
+    }
 
-.jumbotron{
-  margin-left:25%;
-  margin-right:25%;
-  background-color:#0474b8;
-}
+    .form-links
+    {
+      text-align: center;
+      margin-top: 1em;
+      margin-bottom: 50px;
+    }
 
-.input-group-prepend{
-  margin-left: 25%;
-}
+    .form-links a
+    {
+      color: #fff;
+    }
 
-.input-group-text{
-  background-color:#dfdfdf;
-  color: black;
-}
+/* Form Cadastro */
 
-.form-control-sm{
-  margin-right: 25%;
-}
+    .cadastroCliente{
+      margin-top: 3%;
+      margin-left: 15%;
+      margin-right: 3%;
+    }
+
+    .cadastroCliente h1{
+      margin-bottom: 2%;
+      margin-left: 1%;
+      font-size: 2.5em;
+      font-family: 'Times New Roman';
+      font-weight: bold;
+    }

@@ -1,0 +1,179 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="stylesheets/style.css">
+    <link rel="stylesheet" href="./admin/bower_components/bootstrap/dist/css/bootstrap.min.css">
+  
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="./admin/bower_components/font-awesome/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="./admin/bower_components/Ionicons/css/ionicons.min.css">
+
+      <!-- REQUIRED JS SCRIPTS -->
+  <!-- jQuery 3 -->
+  <script src="./admin/bower_components/jquery/dist/jquery.min.js"></script>
+  <!-- Bootstrap 3.3.7 -->
+  <script src="./admin/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+  <!-- InputMask -->
+  <script src="https://rawgit.com/RobinHerbots/Inputmask/3.x/dist/jquery.inputmask.bundle.js"></script>
+
+    <!-- System Control -->
+    <script type="text/javascript" src="./javascripts/acesso.js"></script>
+    <script type="text/javascript" src="./javascripts/cliente.js"></script>
+</head>
+<body>
+    <div class = "cadastroCliente">
+    <div class="row col-md-10">
+                <form role="form" name="formPerfilCliente"  method="post">
+                    <h1>Cadastro de Cliente</h1>
+                    <!-- box-body -->
+                    <div class="box-body">
+                        <!-- Nome -->
+                        <div class="form-group col-md-12">
+                            <label for="nome">Nome</label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input id="nome" type="text" class="form-control">
+                            </div>
+                        </div>
+      
+                        <!-- DataNasc & Sexo -->
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="dataNasc">Data de Nascimento</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                    <input id="dataNasc" type="date" class="form-control" >
+                                </div>
+                            </div>
+                            
+                            <div class="form-group col-md-6">
+                                <label for="sexo">Sexo</label>
+                                <input class="form-control" type="text" name="sexo" list="sexo" placeholder="Selecione o Sexo" >
+                                <datalist id="sexo">
+                                    <option value="Masculino">  M </option>
+                                    <option value="Feminino">   F </option>
+                                </datalist>
+                            </div>
+                        </div>
+      
+                        <!-- Senha & Re-Senha -->
+                        <div class="form-row">
+                          <div class="form-group col-md-6">
+                              <label for="senha">Senha</label>
+                              <div class="input-group">
+                                  <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                                  <input id="senha" type="password" class="form-control" >
+                              </div>
+                          </div>
+                          
+                          <div class="form-group col-md-6">
+                              <label for="confSenha">Confirme a Senha</label>
+                              <div class="input-group">
+                                  <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                                  <input id="confSenha" type="password" class="form-control" >
+                              </div>
+                          </div>
+                        </div>
+      
+                        <!-- CPF & Telefone -->
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="cpf">CPF</label>
+                                <input id="cpf" type="text" class="form-control" >
+                            </div>
+                    
+                            <div class="form-group col-md-6">
+                                <label for="telefone">Telefone</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-earphone"></i></span>
+                                    <input id="telefone" type="text" class="form-control"  data-inputmask='"mask": "(99) 99999-9999"' data-mask >
+                                </div>
+                            </div>
+                        </div>
+      
+                        <!-- Email -->
+                        <div class="form-group col-md-12">
+                            <label for="email">E-Mail</label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+                                <input id="email" type="email" class="form-control" placeholder="Email" >
+                            </div>
+                        </div>
+      
+                        <!-- Endereco -->
+                        <div class="form-group col-md-12">
+                            <label for="endereco">Endereço</label>
+                            <input id="endereco" type="text" class="form-control" >
+                        </div>
+      
+                        <!-- Cidade & Estado & CEP -->
+                        <div class="form-row">
+                            <div class="form-group col-md-5">
+                                <label for="cidade">Cidade</label>
+                                <input id="cidade" type="text" class="form-control" >
+                            </div>
+                    
+                            <div class="form-group col-md-3">
+                                <label for="estado">Estado</label>
+                                <input class="form-control" type="text" name="estado" list="estado" placeholder="Estado" >
+                                <datalist id="estado">
+                                    <option value="AC"> Acre                </option>
+                                    <option value="AL"> Alagoas             </option>
+                                    <option value="AP"> Amapá               </option>
+                                    <option value="AM"> Amazonas            </option>
+                                    <option value="BA"> Bahia               </option>
+                                    <option value="CE"> Ceará               </option>
+                                    <option value="DF"  >Distrito Federal   </option>
+                                    <option value="ES"> Espírito Santo      </option>
+                                    <option value="GO"> Goiás               </option>
+                                    <option value="MA"> Maranhão            </option>
+                                    <option value="MT"> Mato Grosso         </option>
+                                    <option value="MS"> Mato Grosso do Sul  </option>
+                                    <option value="MG"> Minas Gerais        </option>
+                                    <option value="PA"> Pará                </option>
+                                    <option value="PB"> Paraíba             </option>
+                                    <option value="PR"> Paraná              </option>
+                                    <option value="PE"> Pernambuco          </option>
+                                    <option value="PI"> Piauí               </option>
+                                    <option value="RJ"> Rio de Janeiro      </option>
+                                    <option value="RN"> Rio Grande do Norte </option>
+                                    <option value="RS"> Rio Grande do Sul   </option>
+                                    <option value="RO"> Rondônia            </option>
+                                    <option value="RR"> Roraima             </option>
+                                    <option value="SC"> Santa Catarina      </option>
+                                    <option value="SP"> São Paulo           </option>
+                                    <option value="SE"> Sergipe             </option>
+                                    <option value="TO"> Tocantins           </option>
+                                </datalist>
+                            </div>
+      
+                            <div class="form-group col-md-4">
+                                <label for="cep">CEP</label>
+                                <input id="cep" type="text" class="form-control" >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-primary" onClick="salvaCliente();" data-dismiss="">Salvar</button>
+                    </div>
+                </form>           
+    </div>
+</div>
+    <script>
+        $("input[id*='cpf']").inputmask({
+            mask: ['999.999.999-99'],
+            keepStatic: true
+        });
+        $("#telefone").inputmask({
+            mask: ["(99) 9999-9999", "(99) 99999-9999", ],
+            keepStatic: true
+        });
+        $("#cep").inputmask({
+            mask: ["99999-999"],
+            keepStatic: true
+        });
+    </script>
+</body>
