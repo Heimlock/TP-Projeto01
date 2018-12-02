@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Black Onyx Hostel - O Hostel</title>
+    <meta name="author" content="Themezinho">
+    <meta name="description" content="The Quarto | Premium Hotel Template">
+    <meta name="keywords" content="The, Quarto, hotel, room, accomodation, fancy, premium, suites, gallery">
+
+    <!-- CSS FILES -->
+    <link href="revolution/css/settings.css" rel="stylesheet">
+    <link href="css/jquery.fancybox.css" rel="stylesheet">
+    <link href="css/owl.carousel.min.css" rel="stylesheet">
+    <link href="css/datepicker.css" rel="stylesheet">
+    <link href="css/odometer.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/flaticon.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="stylesheets/style.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+    
+    <!-- Preloader --> 
+    <div class="preloader">
+      <div class="table">
+        <div class="inner">
+          <h5 class="preloader-text">CARREGANDO A PÁGINA</h5>
+          <img src="images/preloader.gif" alt="Image" class="preloader-img"> 
+        </div> <!-- end inner --> 
+      </div> <!-- end table --> 
+    </div> <!-- end preloader -->
+
+    <!-- Navigation --> 
+    <aside class="navigation">
+      <div class="top">Bem Vindo ao Black Onyx Hostel</div> <!-- end top -->
+
+      <div class="table">
+        <div class="inner">
+          <ul id='menu'>
+            <li><a href="index.html">HOME</a></li>
+            <li><a href="tipos_quartos.html">QUARTOS</a></li>
+            <li><a href="descricao_hotel.html">O HOSTEL</a></li>
+          </ul>
+        </div> <!-- end inner --> 
+      </div> <!-- end table -->
+
+      <div class="bottom">© 2018 Black Onyx. Todos os direitos reservados.</div> <!-- end bottom -->
+    </aside> <!-- end navigation -->
+
+    <!-- Parte da lateral esquerda --> 
+    <aside class="main-side">
+      <div class="hamburger-menu">
+         <span></span> <span></span> <span></span> 
+      </div> <!-- end hamburger-menu -->
+    </aside> <!-- end main-side -->
+
+    <!-- Parte de cima, topbar, header --> 
+    <header class="int-header">
+      <div class="topbar">
+        <a href="index.html"><img src="images/BO2.png" alt="Image" class="logo"></a>
+        <a id="login"  class="reservation" onclick='$("#login-modal").modal()' >LOGIN</a>
+      </div> <!-- end topbar -->
+    </header> <!-- end header -->
+
+    <!-- Modal Login -->
+    <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+      <div class="modal-dialog">  
+          <div class="row" id="pwd-container">
+              <div class="col-md-6 col-md-offset-3">
+                  <section class="login-form">
+                      <form method="post" name="formLogin" action="#" role="login">
+                          <img src="./ico/apple-touch-icon-114-precomposed.png" class="img-responsive" alt="" />
+                          <center> 
+                              <h3>Login</h3>
+                          </center>
+                          
+                          <input id="login" type="text" class="form-control input-lg" name="login" placeholder="Login" required/>
+
+                          <input id="senha" type="password" class="form-control input-lg" placeholder="Senha" required />
+                          <input class="btn btn-lg btn-primary btn-block" type="button" value="ENTRAR" name="bt_login" onClick="loginUsuario();">
+                          <div>
+                              <a href="#"> Nova Conta </a>
+                              <br>
+                              <a href="#"> Esqueceu a Senha? </a>
+                          </div>
+                      </form>
+                  </section>  
+              </div>
+          </div>
+      </div>
+    </div>
+    <!-- End Modal Login -->
+
+    <!-- Área Central -->
+    <section class="contact">
+      
+      <!-- Contatos, primeira parte -->
+      <div class="container">
+        <div class="row">
+          <div class="col-xs-12">
+            <h5>O QUE OFERECEMOS AOS NOSSOS HÓSPEDES</h5>
+            <h2>Contatos</h2>
+            <p class="lead">Qualquer dúvida, ligue para nós ou nos mande uma mensagem</p>
+          </div> <!-- end col-12 -->
+
+          <div class="col-md-4 col-sm-4 col-xs-12">
+            <address>
+              <h3>LOCALIZAÇÃO</h3>
+              <p>Rua Pedro Alvarez Cabral, 1232<br>
+                Campinas<br>
+                tel.: (19) 33842866 <br>
+              </p>
+            </address>
+          </div> <!-- end col-4 -->
+
+          <div class="col-md-4 col-sm-4 col-xs-12">
+            <address>
+              <h3>PARA RESERVAR</h3>
+              <p>Email: <a href="#">reservation@blackonyx.com.br</a>
+                <br>
+                tel.: (19) 33842333 <br>
+                tel.: (19) 33842334
+              </p>
+            </address>
+          </div> <!-- end col-4 -->
+
+          <div class="col-md-4 col-sm-4 col-xs-12">
+            <address>
+              <h3>RECLAMAÇÃO</h3>
+              <p>Email: <a href="#">rh@blackonyx.com.br</a>
+                <br>
+                tel.: (19) 998333367 <br>
+                tel.: (19) 998336699
+              </p>
+            </address>
+          </div> <!-- end col-4 -->
+        </div> <!-- end row --> 
+      </div> <!-- end container -->
+
+        <!-- Mapa -->
+      <div id="map"></div> <!-- end map -->
+
+      <!-- Como chegar no hotel-->
+      <div class="container">
+        <div class="row">
+          <div class="col-xs-12">
+            <h5>O QUE OFERECEMOS AOS NOSSOS HÓSPEDES</h5>
+            <h2>Como Chegar</h2>
+            <p class="lead">Black Onyx é um hostel de fácil acesso. Veja como chegar até nós: </p>
+          </div> <!-- end col-12 -->
+
+          <div class="col-md-4 col-sm-4 col-xs-12">
+            <div class="reach-box">
+              <h3>POR METRÔ</h3>
+              <p>Não tem metrô em Campinas</p>
+            </div> <!-- end reach-box -->
+          </div> <!-- end col-4 -->
+
+          <div class="col-md-4 col-sm-4 col-xs-12">
+            <div class="reach-box">
+              <h3>ANDANDO</h3>
+              <p>15 minutos de caminhada da estação de trem Anhumas e o Shopping Galleria;</p>
+            </div> <!-- end reach-box -->
+          </div> <!-- end col-4 -->
+
+          <div class="col-md-4 col-sm-4 col-xs-12">
+            <div class="reach-box">
+              <h3>POR ONIBUS</h3>
+              <p>Pegue o 3.81 para ir ao Shopping Dom Pedro, e o 3.33 para ir ao Shopping Iguatemi. Aproveite o 3.62 para ir ao parque Taquaral, o maior de Campinas, 15 minutos daqui.</p>
+            </div> <!-- end reach-box -->
+          </div> <!-- end col-4 -->
+
+          <!-- Formulario de Contato -->
+          <div class="col-xs-12">
+            <div class="contact-form">
+              <h3>Formulário para Contato</h3>
+              <form>
+                <div class="form-group">
+                  <label>Seu Nome</label>
+                  <input type="text" placeholder="Digite seu nome">
+                </div> <!-- end form-group -->
+                
+                <div class="form-group">
+                  <label>Seu E-mail</label>
+                  <input type="text" placeholder="Digite seu e-mail">
+                </div> <!-- end form-group -->
+
+              <div class="form-group">
+                <label>Assunto </label>
+                <input type="text" placeholder="Qual o assunto?">
+              </div> <!-- end form-group -->
+
+              <div class="form-group">
+                <label>Sua mensagem</label>
+                <textarea placeholder="Escreva o que quer nos falar"></textarea>
+              </div> <!-- end form-group -->
+
+              <div class="form-group">
+                <button type="submit"><span data-hover="MANDAR">Mandar</span></button>
+              </div> <!-- end form-group -->
+            </form>
+          </div> <!-- end contact-form -->
+          </div> <!-- end col-12 -->
+        </div> <!-- end row --> 
+      </div> <!-- end container --> 
+    </section> <!-- end contact -->
+    
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="row">
+          
+          <!-- Onde fica o clima e temperatura -->
+          <div class="col-md-3 col-sm-6 col-xs-12"> 
+            <img src="images/BO2.png" alt="Image" class="logo">
+            <div class="weather"> <img src="images/icon-weather.svg" alt="Image"> 23 <span>C</span>
+            </div> <!-- end weather --> 
+          </div> <!-- end col-4 -->
+
+          <!-- A parte de explore no footer -->
+          <div class="col-md-5 col-sm-6 col-xs-12">
+            <h4 class="footer-title">EXPLORE</h4>
+            <ul class="footer-menu">
+              <li><a href="index.html">HOME</a></li>
+              <li><a href="tipos_quartos.html">QUARTOS</a></li>
+              <li><a href="descricao_hotel.html">O HOTEL</a></li>
+            </ul>
+          </div> <!-- end col-4 -->
+        </div>  <!-- end row --> 
+      </div> <!-- end container -->
+      
+      <div class="sub-footer">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-8 col-xs-12">
+              <span class="copyright"> © 2018 Black Onyx. Todos os direitos reservados. </span>
+            </div> <!-- end col-6 -->
+          </div> <!-- end row --> 
+        </div> <!-- end container --> 
+      </div> <!-- end sub-footer --> 
+    </footer> <!-- end footer --> 
+  
+
+    <!-- JS FILES --> 
+    <script type="text/javascript" src="javascripts/acesso.js"></script>
+    <script type="text/javascript" src="javascripts/gerencia.js"></script>
+    <script src="js/jquery.min.js"></script> 
+    <script type="text/javascript">
+      (function($) {
+        $(window).load(function(){
+          $("body").addClass("page-loaded");	
+        });
+      })(jQuery)
+      $(document).ready(function () {
+          verifyStatus(
+              function( dados )
+              {
+                  if( dados.status === 'OK' )
+                  {
+                      //  Ou Modal Cliente
+                      document.getElementById("login").onclick    = function(){logoutUsuario()};
+                      document.getElementById("login").innerHTML  = "LOGOUT";
+                      adminMode(
+                        function({status, data})
+                        {
+                          if( status === 'OK' )
+                          {
+                            document.getElementById("menu").innerHTML  += `<li><a href="./admin/index.html">ADMIN PANEL</a></li>`;
+                          }
+                        }
+                      );
+                  }
+              }
+          );
+      });
+    </script> 
+    <script src="js/bootstrap.min.js"></script> 
+    <script src="js/bootstrap-datepicker.min.js"></script> 
+    <script src="js/jquery.dateFormat.js"></script> 
+    <script src="js/owl.carousel.min.js"></script> 
+    <script src="js/jquery.fancybox.js"></script> 
+    <script src="js/jquery.stellar.js"></script> 
+    <script src="js/isotope.js"></script> 
+    <script src="js/odometer.min.js"></script> 
+    <script src="js/instagram.js"></script> 
+    <script src="js/scripts.js"></script> 
+    <!-- <script src="http://maps.googleapis.com/maps/api/js?sensor=false" type="text/javascript" ></script>  -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8xA8pzmYJzTUM8zQtZvg0-J7xuPU13TY&callback=initMap" async defer></script>
+    <script src="js/google-maps.js" type="text/javascript"></script> 
+
+  </body>
+</html>
