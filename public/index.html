@@ -238,59 +238,29 @@
     <!-- Carrossel dos quartos, tipos e talz -->
     <section class="highlight-rooms">
       <div class="container">
+        
         <div class="row">
           <div class="col-md-4">
             <h5>QUARTOS DO HOSTEL</h5>
             <h2>Um hostel barato e seguro</h2>
             <a href="tipos_quartos.html" class="button"><span data-hover="VEJA TODOS OS QUARTOS">VEJA TODOS OS QUARTOS</span></a> 
           </div> <!-- end col-4 -->
+        
           <div class="col-md-8">
-            <div class="owl-carousel">
-              
-              <div class="owl-item">
-                <figure class="room-box"> <img src="images/highlight-room1.jpg" alt="Image">
-                  <figcaption class="room-details">
-                    <h3 class="room-name">Quarto1</h3>
-                    <small class="room-desc">Subtitulo1</small> <span class="room-price">R$299<small>,00</small> <span>POR NOITE</span></span> <a href="room-detail.html" class="room-button"><span data-hover="RESERVE JÁ">RESERVE JÁ</span></a> 
-                  </figcaption> <!-- end room-details --> 
-                </figure> <!-- end room-box --> 
-              </div> <!-- end owl-item -->
+            <div class="owl-carousel" >
 
-              <div class="owl-item">
-                <figure class="room-box"> <img src="images/highlight-room2.jpg" alt="Image">
-                  <figcaption class="room-details">
-                    <h3 class="room-name">Quarto2</h3>
-                    <small class="room-desc">Subtitulo2</small> <span class="room-price">R$299<small>,00</small> <span>POR NOITE</span></span> <a href="room-detail.html" class="room-button"><span data-hover="RESERVE JÁ">RESERVE JÁ</span></a> 
-                  </figcaption> <!-- end room-details --> 
-                </figure> <!-- end room-box --> 
-              </div> <!-- end owl-item -->
+                <div id="Quartos_Carrossel1">
+                </div>
 
-              <div class="owl-item">
-                <figure class="room-box"> <img src="images/highlight-room3.jpg" alt="Image">
-                  <figcaption class="room-details">
-                    <h3 class="room-name">Quarto3</h3>
-                    <small class="room-desc">Subtitulo3</small> <span class="room-price">R$299<small>,00</small> <span>POR NOITE</span></span> <a href="room-detail.html" class="room-button"><span data-hover="RESERVE JÁ">RESERVE JÁ</span></a> 
-                  </figcaption> <!-- end room-details --> 
-                </figure> <!-- end room-box --> 
-              </div> <!-- end owl-item -->
+                <div id="Quartos_Carrossel2">
+                </div>
 
-              <div class="owl-item">
-                <figure class="room-box"> <img src="images/highlight-room4.jpg" alt="Image">
-                  <figcaption class="room-details">
-                    <h3 class="room-name">Quarto4</h3>
-                    <small class="room-desc">Subtitulo4</small> <span class="room-price">R$299<small>,00</small> <span>POR NOITE</span></span> <a href="room-detail.html" class="room-button"><span data-hover="RESERVE JÁ">RESERVE JÁ</span></a> 
-                  </figcaption> <!-- end room-details --> 
-                </figure> <!-- end room-box --> 
-              </div> <!-- end owl-item -->
+                <div id="Quartos_Carrossel3">
+                </div>
 
-              <div class="owl-item">
-                <figure class="room-box"> <img src="images/highlight-room5.jpg" alt="Image">
-                  <figcaption class="room-details">
-                    <h3 class="room-name">Quarto5</h3>
-                    <small class="room-desc">Subtitulo5</small> <span class="room-price">R$299<small>,00</small> <span>POR NOITE</span></span> <a href="room-detail.html" class="room-button"><span data-hover="RESERVE JÁ">RESERVE JÁ</span></a> 
-                  </figcaption> <!-- end room-details --> 
-                </figure> <!-- end room-box --> 
-              </div> <!-- end owl-item --> 
+                <div id="Quartos_Carrossel4">
+                </div> 
+
             </div> <!-- end owl-carousel --> 
           </div> <!-- end col-8 --> 
         </div> <!-- end row --> 
@@ -351,7 +321,7 @@
         </div>  <!-- end row --> 
       </div> <!-- end container -->
       
-      <div class="sub-footer">
+      <div class="sub-footer" >
         <div class="container">
           <div class="row">
             <div class="col-sm-8 col-xs-12">
@@ -363,38 +333,49 @@
     </footer> <!-- end footer --> 
 
     <!-- JS FILES --> 
+
+    <script type="text/javascript" src="javascripts/index_carrossel.js"></script>
+
     <script type="text/javascript" src="javascripts/acesso.js"></script>
     <script type="text/javascript" src="javascripts/gerencia.js"></script>
     <script src="js/jquery.min.js"></script> 
+    
     <script type="text/javascript">
+      
       (function($) {
         $(window).load(function(){
           $("body").addClass("page-loaded");	
         });
       })(jQuery)
-      $(document).ready(function () {
+      
+      $(document).ready(
+
+        function () {
+          listaQuartos(criarCardCarrossel),
           verifyStatus(
-              function( dados )
+            function( dados )
+            {
+              if( dados.status === 'OK' )
               {
-                  if( dados.status === 'OK' )
+                //  Ou Modal Cliente
+                document.getElementById("login").onclick    = function(){logoutUsuario()};
+                document.getElementById("login").innerHTML  = "LOGOUT";
+                adminMode(
+                  function({status, data})
                   {
-                      //  Ou Modal Cliente
-                      document.getElementById("login").onclick    = function(){logoutUsuario()};
-                      document.getElementById("login").innerHTML  = "LOGOUT";
-                      adminMode(
-                        function({status, data})
-                        {
-                          if( status === 'OK' )
-                          {
-                            document.getElementById("menu").innerHTML  += `<li><a href="./admin/index.html">ADMIN PANEL</a></li>`;
-                          }
-                        }
-                      );
+                    if( status === 'OK' )
+                    {
+                      document.getElementById("menu").innerHTML  += `<li><a href="./admin/index.html">ADMIN PANEL</a></li>`;
+                    }
                   }
+                );
               }
+            }
           );
-      });
-    </script> 
+        }
+      );
+
+    </script>
     <script src="js/bootstrap.min.js"></script> 
     <script src="js/bootstrap-datepicker.min.js"></script> 
     <script src="js/jquery.dateFormat.js"></script> 
