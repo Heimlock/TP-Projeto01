@@ -1,6 +1,19 @@
 var express = require('express');
 var router = express.Router();
 
+router.post('/novaReserva', function (req, res, next)
+{  // Cpf DataIn DataOUT DataOUT ID_Quarto QntCamas
+    var input   =   req.body;
+    req.getConnection(function (err, connection) {
+        var query = connection.query("INSERT INTO Estadia SET ? ", input, function (err, rows) {
+                if (err)
+                    res.json({ status: 'ERROR', data: + err });
+                else
+                    res.json({ status: 'OK', data: 'Incluído com sucesso!' });
+                });
+        });
+    });
+
 router.get('/lista', function (req, res, next) {
     var query   =   "SELECT * FROM Estadia";
     if (req.session.logado)
@@ -57,27 +70,88 @@ router.get('/custoEstadia', function(req, res, next){
     });
 });
 
+router.post('/prevCusto', function(req, res, next){
+    var input       =   req.body;
+    // var query       =   `SELECT	ROUND((CAST(${input.qntCamas} AS SIGNED) * Preco * (TIMESTAMPDIFF(DAY, TIMESTAMP('${input.dataIN}'), TIMESTAMP('${input.dataOUT}')))), 2) as Custo `
+    //                     `FROM Quartos WHERE ID=${input.ID_Quarto}`;
+    var query       =   `SELECT	ROUND((CAST(${input.qntCamas} AS SIGNED) * Preco * (TIMESTAMPDIFF(DAY, TIMESTAMP('${input.dataIN}'), TIMESTAMP('${input.dataOUT}')))), 2) as Custo ` +
+                        `FROM Quartos ` +
+                        `WHERE ID=${input.ID_Quarto}`;
+
+    req.getConnection( function( err, connection ){
+        var conn = connection.query( query, function(err, rows){
+            if( err )
+                res.json({ status:'ERROR', data: err });
+            else
+                res.json({ status:'OK', data: rows });
+        });
+        if( err )
+        res.json({ status:'ERROR', data: err });
+    });
+});
+
+router.post('/findCliente', function(req, res, next){
+        var input       =   req.body;
+        var querySTR;
+
+        if( input.id === 'nome' )
+          querySTR    =   `SELECT * FROM Clientes where Nome='${input.key}'`;
+        else
+          querySTR    =   `SELECT * FROM Clientes where Cpf=${input.key}`;
+
+        req.getConnection( function( err, connection ){
+            var query = connection.query( querySTR, function(err, rows){
+                if( err )
+                    res.json({ status:'ERROR', data: err });
+                else
+                    res.json({ status:'OK', data: rows });
+            });
+            if( err )
+            res.json({ status:'ERROR', data: err });
+        });
+    });
+
 //  Listar Camas Disponiveis dentro do Intervalo DataIn e DataOUT
 router.post('/listaDisp', function(req, res, next){
         var input       =   req.body;
-        // var querySTR    =   'SELECT C.ID as ID, C.Preco as Preco, CQ.ID_Quarto as Quarto FROM Camas C, CamasQuarto CQ WHERE C.ID = CQ.ID_Cama AND ' +
-        //                     'ID NOT IN (' +
-        //                     '   SELECT ID_Cama from Estadia where ID_Cama IN (' +
-        //                     '       SELECT ID_Cama FROM Estadia WHERE (' +
-        //                     '           ( Timestamp("' + input.dataIN + '") <= PrevSaida )    AND' +
-        //                     '           ( Timestamp("' + input.dataOUT + '") > DataEntrada )' +
-        //                     '       )' +
-        //                     '   )' +
-        //                     ')';
-        var querySTR        =   `SELECT * FROM Quartos where ID IN` +
-                                `(	SELECT ID_Quarto FROM Estadia` +
-                                `    WHERE ID_Quarto NOT IN ` +
-                                `    (	SELECT ID_Quarto FROM Estadia ` +
-                                `        WHERE ( ( Timestamp(${input.dataIN}) <= PrevSaida )` +
-                                `                AND` +
-                                `                ( Timestamp(${input.dataOUT}) >= DataEntrada ))` +
-                                `    ) GROUP by ID_Quarto` +
-                                `)`;
+        // var querySTR    =   `SELECT * FROM Quartos where ID IN (	`                     +
+        //                     `	SELECT ID_Quarto FROM Estadia `                           +
+        //                     `    WHERE ID_Quarto NOT IN 		( `                         +
+        //                     `			SELECT ID_Quarto FROM Estadia `                       +
+        //                     `			WHERE ( `                                             +
+        //                     `					( Timestamp('${input.dataIN}') <  PrevSaida ) `   +
+        //                     `					AND `                                             +
+        //                     `					( Timestamp('${input.dataOUT}') >= DataEntrada )` +
+        //                     `			) `                                                   +
+        //                     `		) `                                                     +
+        //                     `) GROUP by ID`;
+        var querySTR    = "SELECT * FROM Quartos " +
+                          "WHERE ID IN " +
+                          "(   SELECT ID_Quarto FROM Estadia " +
+                          "    WHERE ID_Quarto NOT IN "  +
+                          "    	( "  +
+                          "    		SELECT ID_Quarto FROM Estadia " +
+                          "    		WHERE " +
+                          `    		(   ( Timestamp('${input.dataIN}') <  PrevSaida ) ` +
+                          "    				AND "  +
+                          `    				( Timestamp('${input.dataOUT}') >= DataEntrada ) `  +
+                          "    		) " +
+                          "    	) "  +
+                          "    UNION " +
+                          "    SELECT X.ID_Quarto "  +
+                          "    FROM "  +
+                          "    (	SELECT E.DataEntrada, E.PrevSaida, E.ID_Quarto, (Q.qntCamas - E.QntCamas) as CamasLivres " +
+                          "    	FROM Estadia E, Quartos Q "  +
+                          "    	WHERE "  +
+                          `    	(	( Timestamp('${input.dataIN}') <  PrevSaida ) `  +
+                          "    		AND " +
+                          `    		( Timestamp('${input.dataOUT}') >= DataEntrada ) `  +
+                          "    		AND Q.ID=ID_Quarto "  +
+                          "    	) "  +
+                          "    ) X " +
+                          "    WHERE " +
+                          "    X.CamasLivres>0 "+
+                          ")";
 
         req.getConnection( function( err, connection ){
             var query = connection.query( querySTR, function(err, rows){

@@ -98,11 +98,11 @@ function    getReservaData( COD, callback )
 function    fillFormReserva( {status, data} )
 {
     // COD, ID_Cliente, Cpf, NomeCliente, ID_Quarto, Titulo, qntCamas, DataEntrada, PrevSaida, Motivo
-    var form        =   document.formReserva,
-        motivoSTR;
+    var form              =   document.formReserva,
+        btnfecharReserva  =   document.getElementById("finalizarReserva"),
+        motivoSTR, custo;
     const   { COD, ID_Cliente, Cpf, NomeCliente, ID_Quarto, Titulo,
               qntCamas, DataEntrada, PrevSaida, Motivo }    =  data[0];
-
 
     // Férias Negócios Congresso Estudos Saúde Outro
     if( Motivo  === 'F' )       motivoSTR = "Férias";
@@ -116,16 +116,30 @@ function    fillFormReserva( {status, data} )
     form.cpf.value      =   Cpf;
     form.numQuarto.value=   ( (ID_Quarto < 10) ? ('0' + ID_Quarto) : (ID_Quarto) );
     form.titulo.value   =   Titulo;
-    form.qntCamas.value =   qntCamas;
+    form.qntCamas.value =   ( (qntCamas < 10) ? ('0' + qntCamas) : (qntCamas) );
     form.dataIN.value   =   DataEntrada.slice(0,10);
     form.dataOUT.value  =   PrevSaida.slice(0,10);
     form.motivo.value   =   motivoSTR;
     calculaCusto(Cpf,
       function({status, data})
       {
-        form.preco.value   =   ((data[0].Custo > 0) ? (data[0].Custo) : ("0000"));
+        custo   = data[0].Custo;
+        if( custo == 0 )
+        {
+          custo     =   "0000";
+        }
+        else if( (custo.toString().length == 2) || (custo.toString().length == 3))
+        {
+            custo   =   custo.toString()    +   ".00";
+        }
+        else if( (custo.toString().length == 4 & custo < 100) || (custo.toString().length == 5 & custo > 100) )
+        {
+            custo   =   custo.toString()    +   "0";
+        }
+        form.preco.value   =   custo;
       }
     );
+    btnfecharReserva.href = `./finalizarReserva.html?COD=${COD}`;
 }
 
 function    calculaCusto( CPF, callback )
@@ -145,6 +159,176 @@ function    calculaCusto( CPF, callback )
   });
 }
 
+function    fillQuartos()
+{
+    var   form           = document.formReserva,
+          quarto,
+          i;
+
+    if( arguments.length == 0 )
+    {
+      console.log('oi');
+      document.getElementById('numQuarto').innerHTML  =   '<option value="-1" selected="">Nenhum</option>';
+      document.formReserva.titulo.value               =   '';
+    }
+    else
+    {
+        var {status, data} = arguments[0];
+        if(data.length != 0)
+        {
+          document.getElementById('numQuarto').innerHTML =   "";
+          for( i=0; i < data.length; i++ )
+          {
+            quarto    = data[i];
+            document.getElementById('numQuarto').innerHTML += `<option value="${data[i].ID}">$${data[i].Preco} - ${data[i].Titulo}</option>`;
+          }
+        }
+        else
+        {
+          document.getElementById('numQuarto').innerHTML  =   '<option value="-1" selected="">Nenhum</option>';
+          document.formReserva.titulo.value               =   '';
+        }
+    }
+}
+
+function    fillQuartoData()
+{
+  var   numQuarto = document.getElementById("numQuarto");
+  if( numQuarto.value > 0 )
+  {
+    getRoomData( numQuarto.value,
+      function ({status, data})
+      {
+        document.formReserva.titulo.value = data[0].Titulo;
+      }
+    )
+  }
+}
+
+function    prevCusto()
+{
+    //  qntCamas dataIN dataOUT ID_Quarto
+    var form    =   document.formReserva,
+        input   =   { ID_Quarto:  document.getElementById("numQuarto").value,
+                      qntCamas:   form.qntCamas.value,
+                      dataIN:     form.dataIN.value,
+                      dataOUT:    form.dataOUT.value
+                    },
+        custo;
+        $.ajax({
+            url: '/reservas/prevCusto',
+            type: 'post',
+            data: input,
+            error: function (dados) {
+                        console.log("Erro: " + dados.data);
+                        alert('Erro: ' + dados.data);
+                    },
+            success: function ({status, data}) {
+                    if (status === 'ERRO')
+                    {
+                        alert('Erro: ' + data);
+                    }
+                    else
+                    {
+                      // console.log(data);
+                      custo   = data[0].Custo;
+                      if( custo == 0 )
+                      {
+                        custo     =   "0000";
+                      }
+                      else if( (custo.toString().length == 2) || (custo.toString().length == 3))
+                      {
+                          custo   =   custo.toString()    +   ".00";
+                      }
+                      else if( (custo.toString().length == 4 & custo < 100) || (custo.toString().length == 5 & custo > 100) )
+                      {
+                          custo   =   custo.toString()    +   "0";
+                      }
+                      form.preco.value   =   custo;
+                      document.formReserva.preco.value  = custo;
+                    }
+            }
+        });
+}
+
+function    findCliente( id )
+{
+  var form    =   document.formReserva,
+      nome    =   form.nome,
+      cpf     =   form.cpf,
+      input   =   {id:"null", key:"null"};
+
+    input.id  = id;
+    if( id === "nome" )     //  Achar pelo Nome
+      input.key   = nome.value;
+    else if( id === "cpf" ) //  Achar pelo CPF
+      input.key   = ( cpf.value.slice(0,3) + cpf.value.slice(4,7) + cpf.value.slice(8,11) + cpf.value.slice(12,14) );
+
+      $.ajax({
+          url: '/reservas/findCliente',
+          type: 'post',
+          data: input,
+          error: function (dados) {
+                      console.log("Erro: " + dados);
+                      alert('Erro: ' + dados.data);
+                  },
+          success: function ({status, data}) {
+                  if (status === 'ERRO')
+                  {
+                      alert('Erro: ' + data);
+                  }
+                  else
+                  {
+                    if( id === "nome" )     //  Achar pelo Nome
+                    {
+                      cpf.value = data[0].Cpf;
+                    }
+                    else if( id === "cpf" ) //  Achar pelo CPF
+                    {
+                      nome.value = data[0].Nome;
+                    }
+                  }
+          }
+      });
+}
+
+function    novaReserva()
+{
+  var   form  = document.formReserva,
+        input   =   {   ID_Cliente:   -1,
+                        ID_Quarto:    form.numQuarto.value,
+                        qntCamas:     form.qntCamas.value,
+                        DataEntrada:  form.dataIN.value,
+                        PrevSaida:    form.dataOUT.value,
+                        Motivo:       form.motivo.value
+                    };
+  getClientExists(
+    ( form.cpf.value.slice(0,3) + form.cpf.value.slice(4,7) + form.cpf.value.slice(8,11) + form.cpf.value.slice(12,14) ),
+    function( {status, data} )
+    {
+      input.ID_Cliente  = data[0].ID;
+      console.log(input);
+      $.ajax({
+          url: '/reservas/novaReserva',
+          type: 'post',
+          data: input,
+          error: function (dados) {
+                                      alert('0Erro: ' + dados.data);
+                                  },
+          success: function (dados) {
+                                      if (dados.status === 'ERROR')
+                                          alert('1Erro: ' + dados.data);
+                                      else
+                                      {
+                                          alert(dados.data);
+                                          window.location.href = "./listarReservas.html";
+                                      }
+                                    }
+      });
+    }
+  )
+}
+
 //  Disponibilidade
 function    verifDisp()
 {
@@ -152,28 +336,64 @@ function    verifDisp()
     var input   =   {   dataIN:     form.dataIN.value,
                         dataOUT:    form.dataOUT.value
                     };
+
+    if( dataOUT < dataIN ) callback();
+
     $.ajax({
         url: '/reservas/listaDisp',
         type: 'post',
         data: input,
         error: function (dados) {
                     console.log("Erro: " + dados);
-                    alert('Erro0: ' + dados.data);
+                    alert('Erro: ' + dados.data);
                 },
         success: function (dados) {
                 if (dados.status === 'ERRO')
                 {
-                    console.log("Sucesso Erro: " + dados);
+                    // console.log("Erro: " + dados);
                     alert('Erro: ' + dados.data);
                 }
                 else
                 {
                     // alert(dados.data);
                     exibeCamas(dados.data);
-                    console.log(dados.data);
+                    // console.log(dados.data);
                 }
         }
     });
+}
+
+function    consultaDisp( callback )
+{
+  var form    =   document.formReserva;
+  var input   =   {   dataIN:     form.dataIN.value,
+                      dataOUT:    form.dataOUT.value
+                  };
+  if( input.dataOUT < input.dataIN )
+  {
+    console.log("Oi");
+    callback();
+    return;
+  }
+
+  $.ajax({
+      url: '/reservas/listaDisp',
+      type: 'post',
+      data: input,
+      error: function (dados) {
+                  console.log("Erro: " + dados);
+                  alert('Erro0: ' + dados.data);
+              },
+      success: function (dados) {
+              if (dados.status === 'ERRO')
+              {
+                  console.log("Sucesso Erro: " + dados);
+                  alert('Erro: ' + dados.data);
+              }
+              else
+                callback(dados);
+      }
+  });
 }
 
 function    verifReserva( ID, callback )

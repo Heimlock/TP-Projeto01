@@ -51,9 +51,9 @@ router.get('/lista', function (req, res, next) {
             res.json({ status:'ERROR', data: err });
         });
     });
-    
+
     router.get('/verifCliente', function(req, res, next){
-        var query   = `SELECT Nome, Cpf FROM Clientes WHERE Cpf=${req.query.CPF}`;
+        var query   = `SELECT ID, Nome, Cpf FROM Clientes WHERE Cpf=${req.query.CPF}`;
         req.getConnection( function( err, connection ){
             var conn = connection.query( query, function(err, rows){
                 if( err )

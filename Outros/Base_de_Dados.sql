@@ -72,7 +72,20 @@ create Table ImagensQuarto(	COD		    INT NOT NULL AUTO_INCREMENT,
 							CONSTRAINT fk_IQ_Imagem	    foreign key (ID_Imagem)		references Imagens	(ID)
 							);
 
-create Table Estadia    (	COD		    INT NOT NULL AUTO_INCREMENT,
+create Table Estadia    (	COD		    	INT NOT NULL AUTO_INCREMENT,
+													ID_Cliente  INT NOT NULL,
+													ID_Quarto   INT NOT NULL,
+													qntCamas   	INT NOT NULL,
+													DataEntrada TIMESTAMP NOT NULL,
+													PrevSaida   TIMESTAMP NOT NULL,
+						              Motivo      CHAR(1),
+													PRIMARY KEY (COD),
+													CONSTRAINT CHK_Estadia 		CHECK  (Motivo='F' OR Motivo='N' OR Motivo='C' OR Motivo='E' OR Motivo='S' OR Motivo='F' OR Motivo='O'),
+													CONSTRAINT fk_Est_Cliente	foreign key (ID_Cliente)	references Clientes	(ID),
+													CONSTRAINT fk_Est_Quarto	foreign key (ID_Quarto)		references Quartos	(ID)
+							);
+
+create Table OldEstadia	(	COD		    	INT NOT NULL AUTO_INCREMENT,
 													ID_Cliente  INT NOT NULL,
 													ID_Quarto   INT NOT NULL,
 													qntCamas   	INT NOT NULL,
