@@ -103,59 +103,9 @@
             <p class="lead">Veja todas as opções de quartos em nosso hostel. </p>
           </div> <!-- end col-12 -->
         </div> <!-- end row -->
-        
-        <div class="row">
-        <div class="col-md-5 col-md-offset-1 col-sm-6 col-xs-12">
-          <div class="promo-box">
-            <figure class="image"><img src="images/promo1.jpg" alt="Image"></figure>
-            <div class="content">
-              <small>20-27 OCTOBER</small>
-                <h4>Our Special Family Suite</h4>
-                <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Promo code : <strong>OCTOBERFEST</strong> id dolor id nibh ultricies</p>
-                <span>% 20 DISCOUNT</span>
-            </div> <!-- end content -->
-          </div> <!-- end promo-box -->
-        </div> <!-- end col-5 -->
 
-        <div class="col-md-5 col-sm-6 col-xs-12">
-          <div class="promo-box">
-            <figure class="image"><img src="images/promo2.jpg" alt="Image"></figure>
-            <div class="content">
-              <small>15-21 NOVEMBER</small>
-                <h4>Deluxe Premium King Suite</h4>
-                <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Promo code : <strong>KINGSUITE</strong> id dolor id nibh ultricies</p>
-                <span>% 17 DISCOUNT</span>
-              </div> <!-- end content -->
-            </div> <!-- end promo-box -->
-          </div> <!-- end col-5 -->
-        </div> <!-- end row -->
+        <div id="result"></div>
 
-        <div class="row">
-          <div class="col-md-5 col-md-offset-1 col-sm-6 col-xs-12">
-            <div class="promo-box">
-              <figure class="image"><img src="images/promo3.jpg" alt="Image"></figure>
-              <div class="content">
-                <small>20-27 OCTOBER</small>
-                  <h4>Open Beufet Restraurant</h4>
-                  <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Promo code : <strong>OPENBUEFET</strong> id dolor id nibh ultricies</p>
-                  <span>% 50 DISCOUNT</span>
-              </div> <!-- end content -->
-            </div> <!-- end promo-box -->
-          </div> <!-- end col-5 -->
-
-          <div class="col-md-5 col-sm-6 col-xs-12">
-            <div class="promo-box">
-              <figure class="image"><img src="images/promo4.jpg" alt="Image"></figure>
-              <div class="content">
-                <small>15-21 NOVEMBER</small>
-                  <h4>One Year Gym Membership</h4>
-                  <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Promo code : <strong>FITNESS</strong> id dolor id nibh ultricies</p>
-                  <span>% 40 DISCOUNT</span>
-              </div> <!-- end content -->
-            </div> <!-- end promo-box -->
-          </div> <!-- end col-5 -->
-
-        </div> <!-- end row -->
       </div> <!-- end container -->
     </section> <!-- end promotions -->
     
@@ -196,6 +146,7 @@
   
 
     <!-- JS FILES --> 
+    <script type="text/javascript" src="javascripts/quartos.js"></script>
     <script type="text/javascript" src="javascripts/acesso.js"></script>
     <script type="text/javascript" src="javascripts/gerencia.js"></script>
     <script src="js/jquery.min.js"></script> 
@@ -206,26 +157,27 @@
         });
       })(jQuery)
       $(document).ready(function () {
-          verifyStatus(
-              function( dados )
-              {
-                  if( dados.status === 'OK' )
+        listarQuartos(tipoQuartos),
+        verifyStatus(
+          function( dados )
+          {
+            if( dados.status === 'OK' )
+            {
+              //  Ou Modal Cliente
+              document.getElementById("login").onclick    = function(){logoutUsuario()};
+              document.getElementById("login").innerHTML  = "LOGOUT";
+              adminMode(
+                function({status, data})
+                {
+                  if( status === 'OK' )
                   {
-                      //  Ou Modal Cliente
-                      document.getElementById("login").onclick    = function(){logoutUsuario()};
-                      document.getElementById("login").innerHTML  = "LOGOUT";
-                      adminMode(
-                        function({status, data})
-                        {
-                          if( status === 'OK' )
-                          {
-                            document.getElementById("menu").innerHTML  += `<li><a href="./admin/index.html">ADMIN PANEL</a></li>`;
-                          }
-                        }
-                      );
+                    document.getElementById("menu").innerHTML  += `<li><a href="./admin/index.html">ADMIN PANEL</a></li>`;
                   }
-              }
-          );
+                }
+              );
+            }
+          }
+        );
       });
     </script> 
     <script src="js/bootstrap.min.js"></script> 

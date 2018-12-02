@@ -1,3 +1,46 @@
+// ID , QntCamas, Titulo, Descricao, Preco
+function tipoQuartos(quartos)
+{
+    var quarto, preco;
+    document.getElementById('result').innerHTML = "";
+    
+    for (var i = 0; i <  quartos.length; i++)
+    {
+        quarto  = quartos[i];
+        preco   = parseFloat(quarto.Preco).toFixed(2);
+
+        if (i%2 === 0){
+            var dadosQuarto =   '<div class="row"></div>'+
+                                    '<div class="col-md-5 col-md-offset-1 col-sm-6 col-xs-12">'+
+                                        '<div class="promo-box">'+
+                                            '<figure class="image"><img src="images/promo'+quarto.ID+'.jpg" alt="Image"></figure>'+
+                                            '<div class="content">'+
+                                                '<small>'+quarto.QntCamas+' Camas</small>'+
+                                                '<h4>'+quarto.Titulo+'</h4>'+
+                                                '<p>'+quarto.Descricao+'</p>'+
+                                                '<span>'+preco+' Por Noite</span>'+
+                                            '</div> <!-- end content -->'+
+                                        '</div> <!-- end promo-box -->'+
+                                    '</div> <!-- end col-5 -->';
+        }
+        else{
+            var dadosQuarto =   '<div class="col-md-5 col-sm-6 col-xs-12">'+
+                                    '<div class="promo-box">'+
+                                        '<figure class="image"><img src="images/promo'+quarto.ID+'.jpg" alt="Image"></figure>'+
+                                        '<div class="content">'+
+                                            '<small>'+quarto.QntCamas+'</small>'+
+                                            '<h4>'+quarto.Titulo+'</h4>'+
+                                            '<p>'+quarto.Descricao+'</p>'+
+                                            '<span>'+preco+' Por Noite</span>'+
+                                        '</div> <!-- end content -->'+
+                                    '</div> <!-- end promo-box -->'+
+                                '</div> <!-- end col-5 -->'+
+                            '</div> <!-- end row -->';
+        }
+        document.getElementById('result').innerHTML += dadosQuarto; //+ '<br><br>';
+    }
+}
+
 
 // ID , QntCamas, Titulo, Descricao, Preco
 function exibeQuartos( quartos )

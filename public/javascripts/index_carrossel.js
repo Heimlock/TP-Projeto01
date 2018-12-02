@@ -92,7 +92,7 @@ var dadosQuarto3 =  '<div class="owl-item">'+
 //Implementa informações no div
 document.getElementById('Quartos_Carrossel3').innerHTML = dadosQuarto3; //+ '<br><br>';/
 //------------------------------------------------------------------------------------------------        
-    var dadosQuarto =   '<div class="owl-item">'+
+    var dadosQuarto4 =   '<div class="owl-item">'+
                             '<figure class="room-box">' +
                                 '<img src="images/highlight-room'+quarto4.ID+'.jpg" alt="Image">'+
                                 '<figcaption class="room-details">'+
