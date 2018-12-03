@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Admin Control</title>
+
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="bower_components/Ionicons/css/ionicons.min.css">
+
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+  <link rel="stylesheet" href="dist/css/skins/skin-blue.min.css">
+
+  <!-- Google Font -->
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+
+  <!-- REQUIRED JS SCRIPTS -->
+  <!-- jQuery 3 -->
+  <script src="bower_components/jquery/dist/jquery.min.js"></script>
+  <!-- Bootstrap 3.3.7 -->
+  <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+  <!-- AdminLTE App -->
+  <script src="dist/js/adminlte.min.js"></script>
+  <!-- InputMask -->
+  <script src="https://rawgit.com/RobinHerbots/Inputmask/3.x/dist/jquery.inputmask.bundle.js"></script>
+  <!-- MomentJS -->
+  <script type="text/javascript" src="../javascripts/moment.js"></script>
+
+  <!-- System Control -->
+  <script type="text/javascript" src="../javascripts/acesso.js"></script>
+  <script type="text/javascript" src="../javascripts/cliente.js"></script>
+  <script type="text/javascript" src="../javascripts/gerencia.js"></script>
+  <script type="text/javascript" src="../javascripts/info.js"></script>
+  <script type="text/javascript" src="../javascripts/reservas.js"></script>
+  <script type="text/javascript" src="../javascripts/quartos.js"></script>
+
+  <!-- Initial Scripts -->
+  <script>
+    $(document).ready(
+      verifAdmin()
+    );
+  </script>
+</head>
+<!-- <body onload="window.print();"> -->
+<body>
+<div class="wrapper">
+  <!-- Main content -->
+  <section class="invoice">
+    <!-- title row -->
+    <div class="row">
+      <div class="col-xs-12">
+        <h2 class="page-header">
+          <i class="fa fa-globe"></i> Black Onyx Hostel
+          <small class="pull-right">Data: <span id="dataHoje">99/99/9999</span></small>
+        </h2>
+      </div>
+      <!-- /.col -->
+    </div>
+    <!-- info row -->
+    <div class="row invoice-info">
+      <div class="col-sm-4 invoice-col">
+        De
+        <address>
+          <strong>Black Onyx Hostel</strong><br>
+          Rua Pedro Alvarez Cabral, 1232<br>
+          Campinas, SP 13025-004<br>
+          Telefone: (19) 33842866<br>
+          Email: rh@blackonyx.com.br
+        </address>
+      </div>
+      <!-- /.col -->
+      <div class="col-sm-4 invoice-col">
+        Para
+        <address id="clienteData">
+          <strong>John Doe</strong><br>
+          795 Folsom Ave, Suite 600<br>
+          San Francisco, CA 94107<br>
+          Phone: (555) 539-1037<br>
+          Email: john.doe@example.com
+        </address>
+      </div>
+      <!-- /.col -->
+      <div class="col-sm-4 invoice-col">
+        <b>Reserva ID:</b> <span id="idReserva">#007612</span><br>
+        <br>
+        <b>Vencimento:</b> <span class='dataVenc'>01/01/2018</span><br>
+        <b>Número da Conta:</b> 987-65431
+      </div>
+      <!-- /.col -->
+    </div>
+    <!-- /.row -->
+
+    <!-- Table row -->
+    <div class="row">
+      <div class="col-xs-12 table-responsive">
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th>Diárias</th>
+            <th>Num. Camas</th>
+            <th>ID #</th>
+            <th>Quarto</th>
+            <th>Entrada</th>
+            <th>Saída</th>
+            <th>Subtotal</th>
+          </tr>
+          </thead>
+          <tbody id="itens">
+          <tr>
+            <td>1</td>
+            <td>Call of Duty</td>
+            <td>455-981-221</td>
+            <td>$64.50</td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>Need for Speed IV</td>
+            <td>247-925-726</td>
+            <td>$50.00</td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>Monsters DVD</td>
+            <td>735-845-642</td>
+            <td>$10.70</td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>Grown Ups Blue Ray</td>
+            <td>422-568-642</td>
+            <td>$25.99</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- /.col -->
+    </div>
+    <!-- /.row -->
+
+    <div class="row">
+      <!-- accepted payments column -->
+      <div class="col-xs-6">
+        <p class="lead">Métodos de Pagamento:</p>
+        <img src="./dist/img/credit/visa.png" alt="Visa">
+        <img src="./dist/img/credit/mastercard.png" alt="Mastercard">
+        <img src="./dist/img/credit/american-express.png" alt="American Express">
+        <img src="./dist/img/credit/paypal2.png" alt="Paypal">
+
+        <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
+          Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles, weebly ning heekya handango imeem plugg
+          dopplr jibjab, movity jajah plickers sifteo edmodo ifttt zimbra.
+        </p>
+      </div>
+      <!-- /.col -->
+
+      <div class="col-xs-6">
+        <p class="lead">Vencimento <span class='dataVenc'>01/01/2018</span></p>
+
+        <div class="table-responsive">
+          <table class="table">
+            <tr>
+              <th style="width:50%">Subtotal:</th>
+              <td id="subtotal">$250.30</td>
+            </tr>
+            <tr>
+              <th>Taxa Administrativa</th>
+              <td id="taxaAdm">$10.34</td>
+            </tr>
+            <tr>
+              <th>Total:</th>
+              <td id="total">$265.24</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <!-- /.col -->
+    </div>
+    <!-- /.row -->
+  </section>
+  <!-- /.content -->
+</div>
+<!-- ./wrapper -->
+<script>
+  $(document).ready(fillInvoice());
+</script>
+</body>
+</html>

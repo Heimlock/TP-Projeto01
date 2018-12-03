@@ -4,7 +4,7 @@
 -- ( 30 ),
 -- ( 40 );
 
-INSERT INTO Quartos ( Titulo, QntCamas, Preco ) VALUES 
+INSERT INTO Quartos ( Titulo, QntCamas, Preco ) VALUES
 ( "Quarto01", 1, 10.10 ),
 ( "Quarto02", 2, 20 ),
 ( "Quarto03", 3, 30 ),
@@ -33,12 +33,12 @@ INSERT INTO Gerentes    ( Nome, Usuario, Senha ) VALUES
 ( "Adm_Nome01", "admin01", "123456" ),
 ( "Adm_Nome02", "admin02", "123456" );
 
-INSERT INTO Estadia ( ID_Cliente, ID_Quarto, DataEntrada, PrevSaida, Motivo ) VALUES 
-( 01, 01, TIMESTAMP("2018-12-01"), TIMESTAMP("2018-12-05"), "F" ),
-( 02, 02, TIMESTAMP("2018-12-02"), TIMESTAMP("2018-12-06"), "N" ),
-( 03, 03, TIMESTAMP("2018-12-04"), TIMESTAMP("2018-12-09"), "C" ),
-( 04, 04, TIMESTAMP("2018-12-05"), TIMESTAMP("2018-12-10"), "E" ),
-( 01, 01, TIMESTAMP("2018-12-11"), TIMESTAMP("2018-12-15"), "S" ),
-( 02, 02, TIMESTAMP("2018-12-12"), TIMESTAMP("2018-12-16"), "O" ),
-( 03, 03, TIMESTAMP("2018-12-14"), TIMESTAMP("2018-12-19"), "F" ),
-( 04, 04, TIMESTAMP("2018-12-15"), TIMESTAMP("2018-12-20"), "N" );
+INSERT INTO Estadia ( ID_Cliente, ID_Quarto, DataEntrada, PrevSaida, qntCamas, Motivo ) VALUES
+( 01, 01, TIMESTAMP("2018-12-01"), TIMESTAMP("2018-12-05"), 1, "F" ),
+( 02, 02, TIMESTAMP("2018-12-02"), TIMESTAMP("2018-12-06"), 2, "N" ),
+( 03, 03, TIMESTAMP("2018-12-04"), TIMESTAMP("2018-12-09"), 3, "C" ),
+( 04, 04, TIMESTAMP("2018-12-05"), TIMESTAMP("2018-12-10"), 4, "E" ),
+( 01, 01, TIMESTAMP("2018-12-11"), TIMESTAMP("2018-12-15"), 1, "S" ),
+( 02, 02, TIMESTAMP("2018-12-12"), TIMESTAMP("2018-12-16"), 1, "O" ),
+( 03, 03, TIMESTAMP("2018-12-14"), TIMESTAMP("2018-12-19"), 1, "F" ),
+( 04, 04, TIMESTAMP("2018-12-15"), TIMESTAMP("2018-12-20"), 1, "N" );

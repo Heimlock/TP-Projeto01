@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
   <!-- Ionicons -->
   <link rel="stylesheet" href="bower_components/Ionicons/css/ionicons.min.css">
-  
+
   <!-- Theme style -->
   <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
   <link rel="stylesheet" href="dist/css/skins/skin-blue.min.css">
@@ -76,7 +76,7 @@
       <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
         <span class="sr-only">Toggle navigation</span>
       </a>
-      
+
       <!-- Navbar Right Menu -->
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
@@ -88,7 +88,7 @@
       </div>
     </nav>
   </header>
-  
+
   <!-- Left side column. contains the logo and sidebar -->
   <aside class="main-sidebar">
 
@@ -107,12 +107,9 @@
 
       <!-- Sidebar Menu -->
       <ul class="sidebar-menu" data-widget="tree">
-        <!-- <li class="header">HEADER</li> -->
-        
+
         <!-- SideBar Options -->
-        <li><a href="./dashboard.html"><i class="fa fa-bar-chart"></i> <span>DashBoard</span></a></li>
-        <!-- <li><a href="#"><i class="fa fa-calendar-check-o"></i> <span>Reservas</span></a></li> -->
-        <!-- <li><a href="#"><i class="fa fa-calendar-check-o"></i> <span>Reservas</span></a></li> -->
+        <!-- <li><a href="./index.html"><i class="fa fa-bar-chart"></i> <span>DashBoard</span></a></li> -->
 
         <!-- SideBar Submenu Reservas -->
         <li class="treeview active">
@@ -123,7 +120,6 @@
           </a>
           <ul class="treeview-menu">
             <li class="active"><a href="./listarReservas.html">Verificar Reservas</a></li>
-            <!-- <li><a href="./aprovarReservas.html">Aprovar Reserva</a></li> -->
             <li><a href="./novaReserva.html">Nova Reserva</a></li>
             <li><a href="./fecharReserva.html">Fechar Reserva</a></li>
           </ul>
@@ -182,71 +178,81 @@
       <!--------------------------
         | Your Page Content Here |
         -------------------------->
-        
+
         <div class="modal fade" id="info-modal" role="dialog" aria-labelledby="largeModal" >
           <div class="modal-dialog">
-          
+
             <!-- Modal content-->
             <div class="modal-content border">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">Informações da Reserva</h4>
               </div>
-              
+
               <div class="modal-body">
                 <div class="row">
                     <form role="form" name="formReserva"  method="post">
                         <!-- box-body -->
                         <div class="box-body">
-                          <!-- Nome -->
-                          <div class="form-group col-md-12">
-                              <label for="nome">Nome</label>
-                              <div class="input-group">
-                                  <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                  <input id="nome" type="text" class="form-control">
+                          <!-- Nome & Cpf -->
+                          <div class="form-row">
+                              <div class="form-group col-md-9">
+                                  <label for="nome">Nome</label>
+                                  <div class="input-group">
+                                      <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                      <input id="nome" type="text" class="form-control" maxlength="80" readOnly>
+                                  </div>
+                              </div>
+                              <div class="form-group col-md-3">
+                                  <label for="cpf">CPF</label>
+                                  <div class="input-group">
+                                      <!-- <span class="input-group-addon"><i></i></span> -->
+                                      <input id="cpf" class="form-control" type="text" readOnly>
+                                  </div>
                               </div>
                           </div>
-                          <!-- QuartoID & QuartoTitulo & Cpf -->
+
+                          <!-- QuartoID & QuartoTitulo & QntCamas -->
                           <div class="form-row">
                             <div class="form-group col-md-3">
-                                <label for="nomeCliente">Quarto</label>
+                                <label for="numQuarto">Quarto</label>
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-bed"></i></span>
-                                    <input id="nomeCliente" type="text" class="form-control" >
-                                </div>
-                            </div>
-                            
-                            <div class="form-group col-md-5">
-                                <label for="titulo">Titulo</label>
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-bed"></i></span>
-                                    <input id="titulo" type="text" class="form-control">
+                                    <input id="numQuarto" type="text" class="form-control" readOnly>
                                 </div>
                             </div>
 
-                            <div class="form-group col-md-4">
-                                <label for="cpf">CPF</label>
+                            <div class="form-group col-md-6">
+                                <label for="titulo">Titulo</label>
                                 <div class="input-group">
-                                    <span class="input-group-addon"><i></i></span>
-                                    <input id="cpf" class="form-control" type="text">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-bed"></i></span>
+                                    <input id="titulo" type="text" class="form-control" readOnly>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-3">
+                                <label for="qntCamas">Número de Camas</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-bed"></i></span>
+                                    <input id="qntCamas" type="text" class="form-control" readOnly>
                                 </div>
                             </div>
                           </div>
-                            
+
                           <!-- DataIN & DataOUT -->
                           <div class="form-row">
                               <div class="form-group col-md-6">
-                                  <label for="DataIN">Chegada</label>
+                                  <label for="dataIN">Chegada</label>
                                   <div class="input-group">
                                       <span class="input-group-addon"><i class="fa fa-calendar-check-o"></i></span>
-                                      <input id="dataIN" type="date" class="form-control" readonly="">
+                                      <input id="dataIN" type="date" class="form-control" readonly>
                                   </div>
                               </div>
                               <div class="form-group col-md-6">
-                                  <label for="dataOUT">Saída</label>
+                                  <label for="dataOUT">Previsão de Saída</label>
                                   <div class="input-group">
                                       <span class="input-group-addon"><i class="fa fa-calendar-times-o"></i></span>
-                                      <input id="dataOUT" type="date" class="form-control" readonly="">
+                                      <input id="dataOUT" type="date" class="form-control" readonly>
                                   </div>
                               </div>
                           </div>
@@ -263,35 +269,22 @@
 
                             <div class="form-group col-md-6">
                                 <label for="motivo">Motivo</label>
-                                <input class="form-control" type="text" name="motivo" list="motivo" placeholder="" readonly="">
-                                <datalist id="motivo">
-                                    <option value="F">  Férias    </option>
-                                    <option value="N">  Negócios  </option>
-                                    <option value="C">  Congresso </option>
-                                    <option value="E">  Estudos   </option>
-                                    <option value="S">  Saúde     </option>
-                                    <option value="O">  Outro     </option>
-                                </datalist>
+                                <input id="motivo" class="form-control" type="text" readonly>
                             </div>
                           </div>
-
-                          <!-- Descricao -->
-                          <!-- <div class="form-group col-md-12">
-                            <label for="descricao">Descrição</label>
-                            <textarea class="form-control" id="descricao" rows="4" style="resize:none" maxlength="200" readonly></textarea>
-                          </div> -->
                         </div>
                         <!-- /.box-body -->
-                    </form>           
+                    </form>
                 </div>
               </div>
-              
+
               <div class="modal-footer">
-                <button id="btn_alterar" type="button" class="btn btn-primary" onClick="alterarQuarto(0);" data-dismiss="">Alterar</button>
+                <!-- <button id="btn_alterar" type="button" class="btn btn-primary" onClick="alterarCliente(0);" data-dismiss="">Alterar</button> -->
+                <a id='finalizarReserva' class="btn btn-primary" href='#' role="button">Finalizar Reserva</a>
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
               </div>
             </div>
-            
+
           </div>
 
           <script id="inputMask">
@@ -304,7 +297,7 @@
                 keepStatic: true
               });
             $("#preco").inputmask({
-              mask: ["99.99", "999.99", ],
+              mask: ["99.99", "999.99", "9999.99", ],
               keepStatic: true
             });
           </script>
@@ -315,10 +308,12 @@
           <thead>
           <tr>
             <th>COD</th>
-            <th>CPF Cliente</th>
+            <th>Cliente</th>
+            <th>CPF</th>
             <th>Quarto</th>
             <th>Entrada</th>
             <th>Saída</th>
+            <th>Número de Camas</th>
             <th>Motivo</th>
             <th>Ação</th>
           </tr>
@@ -334,7 +329,7 @@
   <!-- Main Footer -->
   <footer class="main-footer">
     <!-- Default to the left -->
-    <strong>Copyright &copy; 2018 <a href="#">Hotel X</a>.</strong> All rights reserved.
+    <strong>Copyright &copy; 2018 <a href="../index.html">Hostel Black Onyx</a>.</strong> Todos os Direitos Reservados.
   </footer>
 </div>
 <!-- ./wrapper -->

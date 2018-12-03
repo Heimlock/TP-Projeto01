@@ -9,12 +9,6 @@ function exibeQuartos( quartos )
         quarto  =   quartos[i];
         preco   =   quarto.Preco;
 
-        // 99          2            +   00
-        // 999         3            +   00
-        // 99.9        4 & < 100    +   0
-        // 999.9       5 & > 100    +   0
-        // 99.99       5
-        // 999.99      6
         if( (preco.toString().length == 2) || (preco.toString().length == 3))
         {
             preco   =   preco.toString()    +   ".00";
@@ -29,18 +23,18 @@ function exibeQuartos( quartos )
                             '<td>' + quarto.Titulo + '</td>'  +
                             '<td>' + quarto.QntCamas + '</td>'  +
                             '<td>' + preco + '</td>'  +
-                            `<td>`      + 
+                            `<td>`      +
                             `<a data-toggle="modal" data-target="#info-modal" onClick="getRoomData(${quarto.ID}, fillFormRoom)">Info</a>` +
                             `</td>`     +
                             `</tr>`;
-        document.getElementById('result').innerHTML += dadosQuarto; //+ '<br><br>';
+        document.getElementById('result').innerHTML += dadosQuarto;
     }
 }
 
 function    listarQuartos( callback )
 {
     $(document).ready(function () {
-        $.ajax({    
+        $.ajax({
             url: '/quartos/listaQuartos',
             dataType: 'json',
             error: function (dados) {
@@ -90,12 +84,6 @@ function    fillFormRoom( {status, data} )
     btn_toggle.innerHTML    =   "Alterar";
     btn_toggle.setAttribute('onClick',`alterarEstadoQuarto(${ID});`);
 
-    // 99          2            +   00
-    // 999         3            +   00
-    // 99.9        4 & < 100    +   0
-    // 999.9       5 & > 100    +   0
-    // 99.99       5
-    // 999.99      6
     if( (precoAux.toString().length == 2) || (precoAux.toString().length == 3))
     {
         precoAux   =   precoAux.toString()    +   ".00";
@@ -145,7 +133,7 @@ function salvaQuarto()
         },
         param = new URLSearchParams( window.location.search ),
         urlAcao;
-        
+
     if( arguments.length != 0 )
     {   //  Alteração por Argumento
         urlAcao =   `/quartos/editaQuarto?ID=${arguments[0]}`;
@@ -169,7 +157,7 @@ function salvaQuarto()
                                     {
                                         alert(dados.data);
                                         window.location.reload();
-                                    }    
+                                    }
                                     }
     });
 }

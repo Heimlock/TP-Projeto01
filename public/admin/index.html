@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
   <!-- Ionicons -->
   <link rel="stylesheet" href="bower_components/Ionicons/css/ionicons.min.css">
-  
+
   <!-- Theme style -->
   <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
   <link rel="stylesheet" href="dist/css/skins/skin-blue.min.css">
@@ -38,17 +38,6 @@
   <script type="text/javascript" src="../javascripts/reservas.js"></script>
   <script type="text/javascript" src="../javascripts/quartos.js"></script>
 
-  <!-- Initial Scripts -->
-  <script>
-    $(document).ready(
-      verifAdmin(),
-      getUserData( function( dados ){
-        console.log(dados);
-        document.getElementById("adm_name").innerHTML = dados.data.Nome;
-        // IMG
-      } )
-    );
-  </script>
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -71,7 +60,7 @@
       <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
         <span class="sr-only">Toggle navigation</span>
       </a>
-      
+
       <!-- Navbar Right Menu -->
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
@@ -83,7 +72,7 @@
       </div>
     </nav>
   </header>
-  
+
   <!-- Left side column. contains the logo and sidebar -->
   <aside class="main-sidebar">
 
@@ -103,9 +92,9 @@
       <!-- Sidebar Menu -->
       <ul class="sidebar-menu" data-widget="tree">
         <!-- <li class="header">HEADER</li> -->
-        
+
         <!-- SideBar Options -->
-        <li class="active"><a href="./dashboard.html"><i class="fa fa-bar-chart"></i> <span>DashBoard</span></a></li>
+        <li class="active"><a href="./index.html"><i class="fa fa-bar-chart"></i> <span>DashBoard</span></a></li>
         <!-- <li><a href="#"><i class="fa fa-calendar-check-o"></i> <span>Reservas</span></a></li> -->
         <!-- <li><a href="#"><i class="fa fa-calendar-check-o"></i> <span>Reservas</span></a></li> -->
 
@@ -160,7 +149,7 @@
   <!-- Conteúdo -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-    <section class="content-header">
+    <!-- <section class="content-header">
       <h1>
         Page Header
         <small>Optional description</small>
@@ -169,7 +158,7 @@
         <li><a href="#"><i class="fa fa-dashboard"></i>Admin</a></li>
         <li class="active">Here</li>
       </ol>
-    </section>
+    </section> -->
 
     <!-- Main content -->
     <section class="content container-fluid">
@@ -185,10 +174,12 @@
   <!-- Main Footer -->
   <footer class="main-footer">
     <!-- Default to the left -->
-    <strong>Copyright &copy; 2018 <a href="#">Hotel X</a>.</strong> All rights reserved.
+    <strong>Copyright &copy; 2018 <a href="../index.html">Hostel Black Onyx</a>.</strong> Todos os Direitos Reservados.
   </footer>
 </div>
 <!-- ./wrapper -->
-
+<script>
+  $(document).ready(window.location.href  = './listarReservas.html');
+</script>
 </body>
 </html>

@@ -39,8 +39,8 @@
   <script type="text/javascript" src="../javascripts/cliente.js"></script>
   <script type="text/javascript" src="../javascripts/gerencia.js"></script>
   <script type="text/javascript" src="../javascripts/info.js"></script>
-  <script type="text/javascript" src="../javascripts/reservas.js"></script>
   <script type="text/javascript" src="../javascripts/quartos.js"></script>
+  <script type="text/javascript" src="../javascripts/reservas.js"></script>
 
   <!-- Initial Scripts -->
   <script>
@@ -110,11 +110,9 @@
 
         <!-- SideBar Options -->
         <!-- <li><a href="./index.html"><i class="fa fa-bar-chart"></i> <span>DashBoard</span></a></li> -->
-        <!-- <li><a href="#"><i class="fa fa-calendar-check-o"></i> <span>Reservas</span></a></li> -->
-        <!-- <li><a href="#"><i class="fa fa-calendar-check-o"></i> <span>Reservas</span></a></li> -->
 
         <!-- SideBar Submenu Reservas -->
-        <li class="treeview">
+        <li class="treeview active">
           <a href="#"><i class="fa fa-calendar-check-o"></i> <span>Reservas</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
@@ -122,8 +120,7 @@
           </a>
           <ul class="treeview-menu">
             <li><a href="./listarReservas.html">Verificar Reservas</a></li>
-            <!-- <li><a href="./aprovarReservas.html">Aprovar Reserva</a></li> -->
-            <li><a href="./novaReserva.html">Nova Reserva</a></li>
+            <li class="active"><a href="./novaReserva.html">Nova Reserva</a></li>
             <li><a href="./fecharReserva.html">Fechar Reserva</a></li>
           </ul>
         </li>
@@ -142,7 +139,7 @@
         </li>
 
         <!-- SideBar Submenu Quartos -->
-        <li class="treeview active">
+        <li class="treeview">
           <a href="#"><i class="glyphicon glyphicon-bed"></i> <span>Quartos</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
@@ -150,7 +147,7 @@
           </a>
           <ul class="treeview-menu">
             <li><a href="./listarQuartos.html">Listar Quartos</a></li>
-            <li class="active"><a href="./novoQuarto.html">Novo Quarto</a></li>
+            <li><a href="./novoQuarto.html">Novo Quarto</a></li>
           </ul>
         </li>
         <li ><a onClick="logoutUsuario();"><i class="fa fa-sign-out"></i> <span>LogOut</span></a></li>
@@ -166,12 +163,11 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Novo Quarto
-        <!-- <small>Optional description</small> -->
+        Nova Reserva
       </h1>
       <ol class="breadcrumb">
-        <li><i class="glyphicon glyphicon-bed"></i> Quartos</li>
-        <li class="active">Novo Quarto</li>
+        <li><i class="fa fa-calendar-check-o"></i> Reservas</li>
+        <li class="active">Nova Reserva</li>
       </ol>
     </section>
 
@@ -181,58 +177,107 @@
       <!--------------------------
         | Your Page Content Here |
         -------------------------->
+
         <div class="row col-md-10">
-            <form role="form" name="formQuarto"  method="post">
-                <!-- box-body -->
-                <div class="box-body">
-                  <!-- ID, QntCamas, Titulo, Descricao, Preco -->
-                    <!-- Titulo -->
-                    <div class="form-group col-md-12">
-                        <label for="titulo">Titulo</label>
+          <form role="form" name="formReserva"  method="post">
+              <!-- box-body -->
+              <div class="box-body">
+
+                <!-- Nome & Cpf -->
+                <div class="form-row">
+                    <div class="form-group col-md-9">
+                        <label for="nome">Nome</label>
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-bed"></i></span>
-                            <input id="titulo" type="text" class="form-control">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                            <input id="nome" type="text" class="form-control" maxlength="80" onfocusout="findCliente('nome');" required>
                         </div>
                     </div>
-
-                    <!-- Preço & QntCamas -->
-                    <div class="form-row">
-                      <div class="form-group col-md-6">
-                          <label for="preco">Preço</label>
-                          <div class="input-group">
-                              <span class="input-group-addon"><i class="glyphicon glyphicon-usd"></i></span>
-                              <input id="preco" type="text" class="form-control">
-                          </div>
-                      </div>
-
-                      <div class="form-group col-md-6">
-                          <label for="qntCamas">Número de Camas</label>
-                          <div class="input-group">
-                              <span class="input-group-addon"><i class="fa fa-bed"></i></span>
-                              <input id="qntCamas" class="form-control" type="text">
-                          </div>
-                      </div>
-                    </div>
-
-                    <!-- Descricao -->
-                    <div class="form-group col-md-12">
-                      <label for="descricao">Descrição</label>
-                      <textarea class="form-control" id="descricao" rows="4" style="resize:none" maxlength="200"></textarea>
+                    <div class="form-group col-md-3">
+                        <label for="cpf">CPF</label>
+                        <div class="input-group">
+                            <input id="cpf" class="form-control" type="text" onfocusout="findCliente('cpf');" required>
+                        </div>
                     </div>
                 </div>
-                <!-- /.box-body -->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" onClick="salvaQuarto();">Salvar</button>
-                </div>
-                <script id="inputMask">
-                    $("#preco").inputmask({
-                    mask: ["99.99", "999.99", ],
-                    keepStatic: true
-                    });
-                </script>
-            </form>
 
+                <!-- DataIN & DataOUT -->
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="dataIN">Chegada</label>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-calendar-check-o"></i></span>
+                            <input id="dataIN" type="date" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="dataOUT">Previsão de Saída</label>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-calendar-times-o"></i></span>
+                            <input id="dataOUT" type="date" class="form-control" onfocusout="consultaDisp(fillQuartos);" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- QuartoID & QuartoTitulo & QntCamas -->
+                <div class="form-row">
+                  <div class="form-group col-md-4">
+                      <label for="numQuarto">Quarto</label>
+                      <div class="input-group">
+                          <span class="input-group-addon"><i class="glyphicon glyphicon-bed"></i></span>
+                          <select id="numQuarto" class="form-control" required onfocusout="fillQuartoData();">
+                                <option value="-1" selected="">Nenhum          </option>
+                          </select>
+                      </div>
+                  </div>
+
+                  <div class="form-group col-md-6">
+                      <label for="titulo">Titulo</label>
+                      <div class="input-group">
+                          <span class="input-group-addon"><i class="glyphicon glyphicon-bed"></i></span>
+                          <input id="titulo" type="text" class="form-control" readOnly required>
+                      </div>
+                  </div>
+
+                  <div class="form-group col-md-2">
+                      <label for="qntCamas">Qnt. Camas</label>
+                      <div class="input-group">
+                          <span class="input-group-addon"><i class="glyphicon glyphicon-bed"></i></span>
+                          <input id="qntCamas" type="text" class="form-control" size="2" onfocusout='prevCusto();' required>
+                      </div>
+                  </div>
+                </div>
+
+                <!-- Preço & Motivo -->
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                      <label for="preco">Previsão de Preço</label>
+                      <div class="input-group">
+                          <span class="input-group-addon"><i class="glyphicon glyphicon-usd"></i></span>
+                          <input id="preco" type="text" class="form-control" readOnly required>
+                      </div>
+                  </div>
+
+                  <div class="form-group col-md-6">
+                      <label for="motivo">Motivo</label>
+                      <select id="motivo" class="form-control" required>
+                        <option value="F">  Férias    </option>
+                        <option value="N">  Negócios  </option>
+                        <option value="C">  Congresso </option>
+                        <option value="E">  Estudos   </option>
+                        <option value="S">  Saúde     </option>
+                        <option value="O">  Outro     </option>
+                      </select>
+                  </div>
+                </div>
+              </div>
+              <!-- /.box-body -->
+
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="novaReserva();">Nova Reserva</button>
+              </div>
+          </form>
         </div>
+
     </section>
     <!-- /.content -->
   </div>
@@ -245,6 +290,19 @@
   </footer>
 </div>
 <!-- ./wrapper -->
-
+<script id="inputMask">
+    $("input[id*='cpf']").inputmask({
+      mask: ['999.999.999-99'],
+      keepStatic: true
+    });
+    $("#telefone").inputmask({
+      mask: ["(99) 9999-9999", "(99) 99999-9999", ],
+      keepStatic: true
+    });
+  $("#preco").inputmask({
+    mask: ["99.99", "999.99", "9999.99", ],
+    keepStatic: true
+  });
+</script>
 </body>
 </html>
