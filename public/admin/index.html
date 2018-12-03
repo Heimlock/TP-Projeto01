@@ -38,17 +38,6 @@
   <script type="text/javascript" src="../javascripts/reservas.js"></script>
   <script type="text/javascript" src="../javascripts/quartos.js"></script>
 
-  <!-- Initial Scripts -->
-  <script>
-    $(document).ready(
-      verifAdmin(),
-      getUserData( function( dados ){
-        console.log(dados);
-        document.getElementById("adm_name").innerHTML = dados.data.Nome;
-        // IMG
-      } )
-    );
-  </script>
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -160,7 +149,7 @@
   <!-- Conteúdo -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-    <section class="content-header">
+    <!-- <section class="content-header">
       <h1>
         Page Header
         <small>Optional description</small>
@@ -169,7 +158,7 @@
         <li><a href="#"><i class="fa fa-dashboard"></i>Admin</a></li>
         <li class="active">Here</li>
       </ol>
-    </section>
+    </section> -->
 
     <!-- Main content -->
     <section class="content container-fluid">
@@ -189,6 +178,8 @@
   </footer>
 </div>
 <!-- ./wrapper -->
-
+<script>
+  $(document).ready(window.location.href  = './listarReservas.html');
+</script>
 </body>
 </html>

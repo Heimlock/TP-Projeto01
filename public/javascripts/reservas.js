@@ -1,18 +1,10 @@
 
 // COD, ID_Cliente, ID_Quarto, qntCamas, DataEntrada, PrevSaida, Motivo
 
-function exibeReservas(reservas)
+function    exibeReservas(reservas)
 {
     var reserva, cliente, cpfSTR, cpf, dataIN, dataOUT, motivoSTR, dadosReserva;
     document.getElementById('result').innerHTML =   "";
-
-    function innerSearch( id, clientes )
-    {
-        var i;
-        for( i = 0; i < clientes.length; i++ )
-            if( clientes[i].ID == id ) return i;
-        return -1;
-    }
     listarCliente(
         function ( clientes )
         {
@@ -67,10 +59,38 @@ function    listarReservas( callback )
                     if (dados.status === 'SEMACESSO')
                     {
                         alert('Erro: ' + dados.data);
-                        window.location.href = '/login.html';
+                        window.location.href = '../index.html';
                     }
                     else
                     {
+                        callback(dados.data);
+                    }
+            }
+        });
+    });
+}
+
+function    listarReservasAtivas( callback )
+{
+    $(document).ready(function () {
+        $.ajax({
+            url: '/reservas/listaReservasAtivas',
+            dataType: 'json',
+            error: function (dados) {
+                    alert('Erro: ' + dados.data);
+                    },
+            success: function (dados) {
+                if (dados.status === 'ERRO')
+                    alert('Erro: ' + dados.data);
+                else
+                    if (dados.status === 'SEMACESSO')
+                    {
+                        alert('Erro: ' + dados.data);
+                        window.location.href = '../index.html';
+                    }
+                    else
+                    {
+                        // console.log(dados);
                         callback(dados.data);
                     }
             }
@@ -99,7 +119,7 @@ function    fillFormReserva( {status, data} )
 {
     // COD, ID_Cliente, Cpf, NomeCliente, ID_Quarto, Titulo, qntCamas, DataEntrada, PrevSaida, Motivo
     var form              =   document.formReserva,
-        btnfecharReserva  =   document.getElementById("finalizarReserva"),
+        btnfillInvoice    =   document.getElementById("finalizarReserva"),
         motivoSTR, custo;
     const   { COD, ID_Cliente, Cpf, NomeCliente, ID_Quarto, Titulo,
               qntCamas, DataEntrada, PrevSaida, Motivo }    =  data[0];
@@ -139,7 +159,7 @@ function    fillFormReserva( {status, data} )
         form.preco.value   =   custo;
       }
     );
-    btnfecharReserva.href = `./finalizarReserva.html?COD=${COD}`;
+    btnfillInvoice.href = './fecharReserva.html?id='+COD;
 }
 
 function    calculaCusto( CPF, callback )
@@ -167,7 +187,6 @@ function    fillQuartos()
 
     if( arguments.length == 0 )
     {
-      console.log('oi');
       document.getElementById('numQuarto').innerHTML  =   '<option value="-1" selected="">Nenhum</option>';
       document.formReserva.titulo.value               =   '';
     }
@@ -203,6 +222,25 @@ function    fillQuartoData()
       }
     )
   }
+}
+
+function    fillSelectReservas(reservas)
+{
+    var   reserva, cliente, i;
+    listarCliente(
+        function ( clientes )
+        {
+            if( reservas.length == 0 ) return;
+            document.getElementById('reservas').innerHTML  = "";
+            for (var i = 0; i < reservas.length; i++)
+            {
+                reserva =   reservas[i];
+                cliente =   clientes[innerSearch(reserva.ID_Cliente, clientes)];
+                cpf     =   cliente.Cpf;
+                cpfSTR  =  ( cpf.slice(0,3) + '.' + cpf.slice(3,6) + '.' + cpf.slice(6,9) + '-' + cpf.slice(9,11) );
+                document.getElementById('reservas').innerHTML  += `<option value='${reserva.COD}'>#${reserva.COD} - ${cpfSTR} x ${reserva.qntCamas}</option>`;
+            }
+        });
 }
 
 function    prevCusto()
@@ -292,6 +330,49 @@ function    findCliente( id )
       });
 }
 
+function    findReserva( id )
+{
+  var form      =   document.formReserva,
+      reservas  =   form.reservas,
+      cpf       =   form.cpf,
+      input     =   {id:"null", key:"null"},
+      i;
+
+    input.id  = id;
+    if( id === "reservas" )     //  Achar pelo Select
+      input.key   = reservas.value;
+    else if( id === "cpf" ) //  Achar pelo CPF
+      input.key   = ( cpf.value.slice(0,3) + cpf.value.slice(4,7) + cpf.value.slice(8,11) + cpf.value.slice(12,14) );
+
+      $.ajax({
+          url: '/reservas/findReserva',
+          type: 'post',
+          data: input,
+          error: function (dados) {
+                      console.log("Erro: " + dados);
+                      alert('Erro: ' + dados.data);
+                  },
+          success: function ({status, data}) {
+                  if (status === 'ERRO')
+                  {
+                      alert('Erro: ' + data);
+                  }
+                  else
+                  {
+                    if( id === "reservas" )     //  Achar pelo Reservas
+                    {
+                      console.log(data[0].Cpf);
+                      cpf.value = data[0].Cpf;
+                    }
+                    else if( id === "cpf" ) //  Achar pelo CPF
+                    {
+                      document.getElementById('reservas').value = data[0].COD;
+                    }
+                  }
+          }
+      });
+}
+
 function    novaReserva()
 {
   var   form  = document.formReserva,
@@ -307,7 +388,7 @@ function    novaReserva()
     function( {status, data} )
     {
       input.ID_Cliente  = data[0].ID;
-      console.log(input);
+      // console.log(input);
       $.ajax({
           url: '/reservas/novaReserva',
           type: 'post',
@@ -327,6 +408,137 @@ function    novaReserva()
       });
     }
   )
+}
+
+function    fecharReserva( cod )
+{
+  $.ajax({
+      url: '/reservas/fecharReserva?COD=' + cod,
+      dataType: 'json',
+      type: 'post',
+      error: function (dados) {
+              alert('Erro: ' + dados.data);
+              },
+      success: function (dados)
+          {
+              if(dados.status === 'ERRO')
+              {
+                console.log(dados);
+                alert('Erro: ' + dados.data);
+              }
+              else
+              {
+                  console.log(dados);
+                  alert(dados.data);
+                  window.location.href = './listarReservas.html';
+              }
+          }
+      });
+}
+
+function    fillInvoice()
+{
+    var   COD,
+          dataHoje      = document.getElementById('dataHoje'),
+          clienteData   = document.getElementById('clienteData'),
+          idReserva     = document.getElementById('idReserva'),
+          itens         = document.getElementById('itens'),
+          subtotal      = document.getElementById('subtotal'),
+          taxaAdm       = document.getElementById('taxaAdm'),
+          total         = document.getElementById('total'),
+          linkPrint     = document.getElementById('linkPrint'),
+          btnfecharRes  = document.getElementById('btnFecharReserva'),
+          dataVenc      = document.getElementsByClassName('dataVenc');
+    var   cpf, cep, telefone,
+          dataIN, dataOUT,
+          valorTaxa, valorTotal,
+          taxaSTR, totalSTR, hojeSTR,
+          vencBoleto, i;
+    var   reserva, cliente, custo, dias;
+    var   urlParams = new URLSearchParams(window.location.search);
+
+    if( urlParams.has('id') )
+    {
+        COD =  urlParams.get('id');
+        console.log(COD);
+    }
+    else
+    {
+      COD         = document.formReserva.reservas.value;
+      if( COD == -1 )
+      {
+        alert("Erro: Selecione uma Reserva");
+        return;
+      }
+      document.getElementById('invoice').style = "";
+    }
+
+      getReservaData(
+        COD,
+        function( {status, data} )
+        {
+          reserva   =   data[0];
+          getClientData(
+            reserva.ID_Cliente,
+            function( {status, data} )
+            {
+              cliente   =   data[0];
+              calculaCusto(
+                cliente.Cpf,
+                function( {status, data} )
+                {
+                  custo   = data[0].Custo;
+                  dias    = data[0].Dias;
+                  //  PreSets
+                  cpf         =   ( cliente.Cpf.slice(0,3) + '.' + cliente.Cpf.slice(3,6) + '.' + cliente.Cpf.slice(6,9) + '-' + cliente.Cpf.slice(9,11) );
+                  cep         =   ( cliente.Cep.toString().slice(0,5) + '-' + cliente.Cep.toString().slice(5,8) );
+                  telefone    =   ( '(' + cliente.Telefone.slice(0,2) + ') ' + cliente.Telefone.slice(2,6) + '.' + cliente.Telefone.slice(6,9));
+                  dataIN      =   ( data[0].Entrada.slice(0,10).slice(8,10) + '/' + data[0].Entrada.slice(0,10).slice(5,7) + '/' + data[0].Entrada.slice(0,10).slice(0,4) );
+                  dataOUT     =   ( data[0].Saida.slice(0,10).slice(8,10) + '/' + data[0].Saida.slice(0,10).slice(5,7) + '/' + data[0].Saida.slice(0,10).slice(0,4) );
+                  hojeSTR     =   ( moment().format().slice(0,10).slice(8,10)   + '/' + moment().format().slice(0,10).slice(5,7)   + '/' + moment().format().slice(0,10).slice(0,4) );
+                  // custo       =   parseFloat(custo).toFixed(2);
+                  valorTaxa   =   (custo/100)*10;
+                  taxaSTR     =   parseFloat(valorTaxa).toFixed(2);
+                  valorTotal  =   (valorTaxa + custo);
+                  totalSTR    =   parseFloat(valorTotal).toFixed(2);
+                  vencBoleto  = ( moment().add(7, 'days').format().slice(0,10).slice(8,10)   + '/' + moment().add(7, 'days').format().slice(0,10).slice(5,7)   + '/' + moment().add(7, 'days').format().slice(0,10).slice(0,4) )
+                  //  Fill
+                  dataHoje.innerHTML    = hojeSTR;
+                  clienteData.innerHTML = `<strong>${cliente.Nome}</strong><br>`            +
+                                          `CPF: ${cpf}<br>`                                 +
+                                          `${cliente.Endereco}<br>`                         +
+                                          `${cliente.Cidade}, ${cliente.Estado} ${cep}<br>` +
+                                          `Telefone: ${telefone}<br>`                       +
+                                          `Email: ${cliente.Email}`;
+                  idReserva.innerHTML   = '#' + reserva.COD;
+                  itens.innerHTML       = `<tr>`                    +
+                                          `  <td>${dias}</td>`              +
+                                          `  <td>${reserva.qntCamas}</td>`  +
+                                          `  <td>${reserva.ID_Quarto}</td>` +
+                                          `  <td>${reserva.Titulo}</td>`    +
+                                          `  <td>${dataIN}</td>`            +
+                                          `  <td>${dataOUT}</td>`           +
+                                          `  <td>$${custo}</td>`            +
+                                          `</tr>`;
+                  subtotal.innerHTML    = '$' + custo;
+                  taxaAdm.innerHTML     = '$' + taxaSTR;
+                  total.innerHTML       = '$' + totalSTR;
+                  dataVenc[0].innerHTML = vencBoleto;
+                  dataVenc[1].innerHTML = vencBoleto;
+
+                  if( !urlParams.has('id') )
+                  {
+                    linkPrint.href        = './invoice-print.html?id=' + reserva.COD;
+                    btnfecharRes.onclick = function(){fecharReserva(reserva.COD)};
+                  }
+                  else if( window.location.includes('invoice-print')  )
+                    window.print();
+                }
+              );
+            }
+          );
+        }
+      );
 }
 
 //  Disponibilidade
@@ -371,7 +583,6 @@ function    consultaDisp( callback )
                   };
   if( input.dataOUT < input.dataIN )
   {
-    console.log("Oi");
     callback();
     return;
   }
@@ -412,4 +623,12 @@ function    verifReserva( ID, callback )
                 callback(dados);
             }
         });
+}
+
+function    innerSearch( id, clientes )
+{
+    var i;
+    for( i = 0; i < clientes.length; i++ )
+        if( clientes[i].ID == id ) return i;
+    return -1;
 }

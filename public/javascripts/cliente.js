@@ -267,7 +267,7 @@
                         if (dados.status === 'SEMACESSO')
                         {
                             alert('Erro: ' + dados.data);
-                            window.location.href = '/login.html';
+                            window.location.href = '../index.html';
                         }
                         else
                         {

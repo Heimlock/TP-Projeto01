@@ -14,8 +14,44 @@ router.post('/novaReserva', function (req, res, next)
         });
     });
 
+router.post('/fecharReserva', function(req, res, next){
+    var cod = req.query.COD;  //  Recupera o Valor passado durante requisição
+    req.getConnection( function( err, connection ){
+        connection.query( "DELETE FROM Estadia WHERE COD=" + cod, function(err, rows){
+            if( err )
+                res.json({ status:'ERRO', data: err });
+            else
+                res.json({ status:'OK', data: "Finalizada com Sucesso" });
+        });
+        if( err )
+        res.json({ status:'ERROR', data: err });
+    });
+});
+
+
 router.get('/lista', function (req, res, next) {
     var query   =   "SELECT * FROM Estadia";
+    if (req.session.logado)
+    {
+        req.getConnection(function (err, connection) {
+            connection.query(query, function (err, rows) {
+                if (err)
+                    res.json({ status: 'ERRO', data: + err });
+                else
+                    res.json({ status: 'OK', data: rows });
+            });
+            if (err)
+                res.json({ status: 'ERRO', data: + err });
+        });
+    }
+    else
+    {
+        res.json({ status: 'SEMACESSO', data: 'Usuário precisa estar logado!' });
+    }
+});
+
+router.get('/listaReservasAtivas', function (req, res, next) {
+    var query   =   "SELECT * FROM Estadia WHERE DataEntrada<NOW()";
     if (req.session.logado)
     {
         req.getConnection(function (err, connection) {
@@ -53,9 +89,11 @@ router.get('/listaReserva', function(req, res, next){
 });
 
 router.get('/custoEstadia', function(req, res, next){
-    var query   =   `SELECT	ROUND((E.qntCamas * Q.Preco * (TIMESTAMPDIFF(DAY, E.DataEntrada, NOW()))), 2) as Custo ` +
-                    ` FROM Estadia E, Clientes C, Quartos Q `                                           +
-                    ` WHERE E.ID_Cliente=C.ID AND E.ID_Quarto=Q.ID AND `                                +
+    var query   =   `SELECT	ROUND((E.qntCamas * Q.Preco * (TIMESTAMPDIFF(DAY, E.DataEntrada, NOW()))), 2) as Custo, `+
+      	            `(TIMESTAMPDIFF(DAY, E.DataEntrada, NOW())) as Dias, `                                           +
+                    ` E.DataEntrada as Entrada, NOW() as Saida`                                                      +
+                    ` FROM Estadia E, Clientes C, Quartos Q `                                                        +
+                    ` WHERE E.ID_Cliente=C.ID AND E.ID_Quarto=Q.ID AND `                                             +
                     ` C.Cpf=${req.query.CPF} AND E.DataEntrada<NOW();`;
 
     req.getConnection( function( err, connection ){
@@ -96,8 +134,35 @@ router.post('/findCliente', function(req, res, next){
 
         if( input.id === 'nome' )
           querySTR    =   `SELECT * FROM Clientes where Nome='${input.key}'`;
-        else
+        else if( input.id === 'cpf' )
           querySTR    =   `SELECT * FROM Clientes where Cpf=${input.key}`;
+
+        req.getConnection( function( err, connection ){
+            var query = connection.query( querySTR, function(err, rows){
+                if( err )
+                    res.json({ status:'ERROR', data: err });
+                else
+                    res.json({ status:'OK', data: rows });
+            });
+            if( err )
+            res.json({ status:'ERROR', data: err });
+        });
+    });
+
+router.post('/findReserva', function(req, res, next){
+        var input       =   req.body;
+        var querySTR;
+
+        if( input.id === 'cpf' )
+          querySTR    =   `SELECT E.COD as COD, C.Cpf as Cpf, E.qntCamas as qntCamas, Q.Titulo as Titulo `+
+                          `FROM Estadia E, Clientes C, Quartos Q `            +
+                          `WHERE E.ID_Cliente=C.ID AND E.ID_Quarto=Q.ID AND ` +
+                          `C.Cpf="${input.key}" AND E.DataEntrada<NOW()`;
+        else if( input.id === 'reservas' )
+          querySTR    =   `SELECT E.COD as COD, C.Cpf as Cpf, E.qntCamas as qntCamas, Q.Titulo as Titulo `+
+                          `FROM Estadia E, Clientes C, Quartos Q `            +
+                          `WHERE E.ID_Cliente=C.ID AND E.ID_Quarto=Q.ID AND ` +
+                          `E.COD="${input.key}" AND E.DataEntrada<NOW()`;
 
         req.getConnection( function( err, connection ){
             var query = connection.query( querySTR, function(err, rows){
