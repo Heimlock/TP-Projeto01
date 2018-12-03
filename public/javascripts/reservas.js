@@ -139,25 +139,26 @@ function    fillFormReserva( {status, data} )
     form.dataIN.value   =   DataEntrada.slice(0,10);
     form.dataOUT.value  =   PrevSaida.slice(0,10);
     form.motivo.value   =   motivoSTR;
-    calculaCusto(Cpf,
-      function({status, data})
-      {
-        custo   = data[0].Custo;
-        if( custo == 0 )
-        {
-          custo     =   "0000";
-        }
-        else if( (custo.toString().length == 2) || (custo.toString().length == 3))
-        {
-            custo   =   custo.toString()    +   ".00";
-        }
-        else if( (custo.toString().length == 4 & custo < 100) || (custo.toString().length == 5 & custo > 100) )
-        {
-            custo   =   custo.toString()    +   "0";
-        }
-        form.preco.value   =   custo;
-      }
-    );
+    prevCusto();
+    // calculaCusto(Cpf,
+    //   function({status, data})
+    //   {
+    //     custo   = data[0].Custo;
+    //     if( custo == 0 )
+    //     {
+    //       custo     =   "0000";
+    //     }
+    //     else if( (custo.toString().length == 2) || (custo.toString().length == 3))
+    //     {
+    //         custo   =   custo.toString()    +   ".00";
+    //     }
+    //     else if( (custo.toString().length == 4 & custo < 100) || (custo.toString().length == 5 & custo > 100) )
+    //     {
+    //         custo   =   custo.toString()    +   "0";
+    //     }
+    //     form.preco.value   =   custo;
+    //   }
+    // );
     btnfillInvoice.href = './fecharReserva.html?id='+COD;
 }
 
