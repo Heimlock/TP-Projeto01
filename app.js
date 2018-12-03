@@ -44,10 +44,10 @@ app.use('/users', usersRouter);
       app.use(
       connection(mysql,{
                   host: 'sql10.freemysqlhosting.net',   //  Servidor do banco mysql, se for local: localhost,
-                  user: 'sql10263397',                  //  Usuario com permissao de conexao a base de dados
-                  password: 'TattR8jpE2',               //  Senha de acesso ao banco
+                  user: 'sql10268153',                  //  Usuario com permissao de conexao a base de dados
+                  password: 'GXwfDJ2Vax',               //  Senha de acesso ao banco
                   port : 3306,                          //  Porta do mysql, normalmente 3306
-                  database:'sql10263397'                //  Nome da base de dados (esquema)
+                  database:'sql10268153'                //  Nome da base de dados (esquema)
                 },'pool')
       );
 
