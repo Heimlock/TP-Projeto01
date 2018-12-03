@@ -245,29 +245,19 @@
             <h2>Um hostel barato e seguro</h2>
             <a href="tipos_quartos.html" class="button"><span data-hover="VEJA TODOS OS QUARTOS">VEJA TODOS OS QUARTOS</span></a> 
           </div> <!-- end col-4 -->
-        
+          
           <div class="col-md-8">
             <div class="owl-carousel" >
 
-                <div id="Quartos_Carrossel1">
-                </div>
-
-                <div id="Quartos_Carrossel2">
-                </div>
-
-                <div id="Quartos_Carrossel3">
-                </div>
-
-                <div id="Quartos_Carrossel4">
-                </div> 
-
+              <div id="ExibirCarrossel"></div>
+              
             </div> <!-- end owl-carousel --> 
           </div> <!-- end col-8 --> 
         </div> <!-- end row --> 
       </div> <!-- end container --> 
     </section> <!-- end highlight-rooms -->
     
-    <!-- Descrição do hotel??? -->
+    <!-- Descrição do hotel -->
     <section class="facilities" data-stellar-background-ratio="0.5">
       <div class="container">
         <div class="row">
@@ -334,7 +324,7 @@
 
     <!-- JS FILES --> 
 
-    <script type="text/javascript" src="javascripts/index_carrossel.js"></script>
+    <script type="text/javascript" src="javascripts/quartos.js"></script>
 
     <script type="text/javascript" src="javascripts/acesso.js"></script>
     <script type="text/javascript" src="javascripts/gerencia.js"></script>
@@ -351,7 +341,7 @@
       $(document).ready(
 
         function () {
-          listaQuartos(criarCardCarrossel),
+         listarQuartos(exibeCarrossel),
           verifyStatus(
             function( dados )
             {
