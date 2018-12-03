@@ -1,194 +1,91 @@
-var express = require('express');
-var router = express.Router();
+    function loginUsuario()
+    {
+        var form    =   document.formLogin;
+        var input   =   {   login: form.login.value,
+                            senha: form.senha.value
+                        };
+        var status  =   false;
+        var data;
 
-    router.post('/login', function (req, res, next){
-        var input   = req.body;
-
-        req.getConnection(function (err, connection){
-        // var queryCliente    =   "SELECT * FROM Clientes WHERE CPF='" + input.login + "' AND Senha='" + input.senha + "'";
-        // var queryGerente    =   "SELECT * FROM Gerentes WHERE Usuario='" + input.login + "' AND Senha='" + input.senha + "'";
-
-        var query   =   "SELECT ID, Cpf as login FROM Clientes WHERE Cpf='" + input.login + "' AND Senha='" + input.senha  + "'" +
-                        "UNION " +
-                        "SELECT ID, Usuario as login FROM Gerentes WHERE Usuario='" + input.login + "' AND Senha='" + input.senha + "'";
-
-        // SELECT id, nome  FROM clientes WHERE cpf = 1111 AND senha = sdfsdfsdf
-        // UNION
-        // SELECT id, nome FROM ADM WHERE cpf = 1111 AND senha = sdfsdfsdf
-        connection.query(query, function (err, rows){
-            if (err)
-                res.json({ status: 'ERRO', data: + err });
-            else
-            {
-                if(rows[0] === undefined)
-                {
-                    res.json({  status: 'ERRO',
-                                data: 'Dados de login incorretos!'
-                            });
-                }
-                else
-                {
-                    console.log("login:" + rows[0].login);
-                    req.session.logado  =   true;
-                    req.session.login   =   rows[0].login;
-
-                    res.json({  status: 'OK', 
-                                data:   'Logado com sucesso!'
-                            });
-                }
-            }
-            });
-        });
-    });
-
-    router.get('/status', function (req, res, next){
-        req.getConnection(function (err, connection){
-            if (req.session.logado)
-            {
-                res.json({  status: 'OK', 
-                            data:   req.session.login
-                        });
-            }
-            else
-            {
-                res.json({  status: 'ERRO', 
-                            data:   'Usuário não efetuou o Login'
-                        });
-            }
-        });
-    });
-
-    router.get('/userData', function (req, res, next){
-        req.getConnection(function (err, connection){
-            var query   =   "SELECT Nome, Cpf as login FROM Clientes WHERE Cpf='" + req.session.login + "'"+
-                            "UNION " +
-                            "SELECT Nome, Usuario as login FROM Gerentes WHERE Usuario='" + req.session.login + "'";
-            connection.query(query, function (err, rows){
-                if (err)
-                    res.json({ status: 'ERRO', data: + err });
-                else
-                {
-                    if(rows[0] === undefined)
+        $.ajax({
+            url: '/acesso/login',
+            type: 'post',
+            data: input,
+            error: function (dados) {
+                        alert(dados);
+                        // console.log(dados);
+                        // document.getElementById('status').innerHTML = "";
+                        // document.getElementById('status').innerHTML += '<h2> Status: ' + 'Erro Conexão' + '<br><br>';
+                    },
+            success: function (dados) {
+                    if (dados.status === 'ERRO')
                     {
-                        res.json({  status: 'ERRO',
-                                    data: 'Dados de login incorretos!'
-                                });
+                        alert("Erro: " +  dados.data);
+                        // console.log("Erro: " +  dados.data);
+                        // document.getElementById('status').innerHTML = "";
+                        // document.getElementById('status').innerHTML += '<h2> Status: ' + 'Erro Dados Incorretos' + '<br><br>';
                     }
                     else
                     {
-                        console.log("login:" + rows[0]);
-                        res.json({  status: 'OK', 
-                                    data:   rows[0]
-                                });
+                        alert(dados.data);
+                        // document.getElementById('status').innerHTML = "";
+                        // document.getElementById('status').innerHTML += '<h2> Status: ' + 'Logado' + '<br><br>';
+                        window.location.reload();
                     }
-                }
-            });
-        });
-    });
-
-// function    verifyAdmin( input )
-// {
-//     var queryGerente    =   "SELECT * FROM Gerentes WHERE Usuario='" + input.login + "' AND Senha='" + input.senha + "'";
-//     connection.query(query, function (err, rows){
-//         if (err)
-//             res.json({ status: 'ERRO', data: + err });
-//         else
-//         {
-//             if(rows[0] === undefined)
-//             {
-//                 req.session.isAdmin =   true;
-//             }
-//             else
-//             {
-//                 req.session.isAdmin =   false;
-//             }
-//         }
-//     });
-// }
-
-/*
-    router.post('/loginCliente', function (req, res, next){
-        var input   = req.body;
-
-        req.getConnection(function (err, connection){
-        var queryCliente    =   "SELECT * FROM Clientes WHERE CPF='" + input.login + "' AND Senha='" + input.senha + "'";
-        // var queryGerente    =   "SELECT * FROM Gerentes WHERE Usuario='" + input.login + "' AND Senha='" + input.senha + "'";
-
-        // SELECT id, nome  FROM clientes WHERE cpf = 1111 AND senha = sdfsdfsdf
-        // UNION
-        // SELECT id, nome FROM ADM WHERE cpf = 1111 AND senha = sdfsdfsdf
-
-
-        connection.query(queryCliente, function (err, rows){
-            if (err)
-                res.json({ status: 'ERRO', data: + err });
-            else
-            {
-                if(rows[0] === undefined)
-                {
-                    res.json({  status: 'ERRO',
-                                data: 'Dados de login incorretos!'
-                            });
-                }
-                else
-                {
-                    done    =   true;
-
-                    req.session.logado  =   true;
-                    req.session.login   =   rows[0].login;
-                    res.json({  status: 'OK', 
-                                data:   'Cliente - Logado com sucesso!'
-                            });
-                }
             }
-            });
         });
-    });
+    }
 
-    router.post('/loginGerente', function (req, res, next){
-        var input   = req.body;
-
-        req.getConnection(function (err, connection){
-        // var queryCliente    =   "SELECT * FROM Clientes WHERE CPF='" + input.login + "' AND Senha='" + input.senha + "'";
-        var queryGerente    =   "SELECT * FROM Gerentes WHERE Usuario='" + input.login + "' AND Senha='" + input.senha + "'";
-        
-        connection.query(queryGerente, function (err, rows){
-            if (err)
-                res.json({ status: 'ERRO', data: + err });
-            else
-            {
-                if(rows[0] === undefined)
-                {
-                    res.json({  status: 'ERRO',
-                                data: 'Dados de login incorretos!'
-                            });
-                }
-                else
-                {
-                    done    =   true;
-
-                    req.session.logado  =   true;
-                    req.session.login   =   rows[0].login;
-                    res.json({  status: 'OK', 
-                                data:   'Gerente - Logado com sucesso!'
-                            });
-                }
-            }
-            });
+    function logoutUsuario()
+    {
+        $.ajax({
+            url: '/acesso/logout',
+            type: 'post',
+            error: function (dados) {
+                    alert('Erro: ' + dados.data);
+                    },
+            success: function (dados) {
+                    if (dados.status === 'ERRO')
+                        alert('Erro: ' + dados.data);
+                    else
+                    {
+                        alert(dados.data);
+                        window.location.reload();
+                    }
+        }
         });
-    });
-*/
-    router.post('/logout', function (req, res, next){
-        req.session.destroy(function (err){
-            if (err)
-                res.json({  status: 'ERRO', 
-                            data:   + err 
-                        });
-            else
-                res.json({  status: 'OK', 
-                            data:   'Logout com sucesso!'
-                        });
-        });
-    });
+    }
 
-module.exports = router;
+    /*
+     *  dados.status    === 'ERRO'
+     *  dados.data           Error Msg
+     *  dados.status    === 'OK'
+     *  dados.data           UserID
+     */
+    function verifyStatus( callback )
+    {
+        $.ajax({    url: '/acesso/status',
+                    dataType: 'json',
+                    error:  function (dados) {
+                                    alert('Erro: ' + dados.data);
+                                    callback(dados);
+                                },
+                    success:function (dados) {
+                        callback(dados);
+                    }
+        });
+    }
+
+    function getUserData( callback )
+    {
+        $.ajax({    url: '/acesso/userData',
+                    dataType: 'json',
+                    error:  function (dados) {
+                                    alert('Erro: ' + dados.data);
+                                    callback(dados);
+                                },
+                    success:function (dados) {
+                        callback(dados);
+                    }
+        });
+    }

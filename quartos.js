@@ -1,64 +1,175 @@
-var express = require('express');
-var router = express.Router();
 
+// ID , QntCamas, Titulo, Descricao, Preco
+function exibeQuartos( quartos )
+{
+    var quarto, preco;
+    document.getElementById('result').innerHTML = "";
+    for (var i = 0; i <  quartos.length; i++)
+    {
+        quarto  =   quartos[i];
+        preco   =   quarto.Preco;
 
-//  Listar Todos os Quartos
-router.get('/listaQuartos', function(req, res, next){
-    req.getConnection( function( err, connection ){
-        // var query = connection.query( "SELECT C.ID as ID, C.Preco as Preco, CQ.ID_Quarto as Quarto FROM Camas C, CamasQuarto CQ WHERE C.ID = CQ.ID_Cama", function(err, rows){
-        var query = connection.query( "SELECT * FROM Quartos", function(err, rows){
-            if( err )
-                res.json({ status:'ERROR', data: err });
-            else
-                res.json({ status:'OK', data: rows });
-        });
-        if( err )
-        res.json({ status:'ERROR', data: err });
-    });
-});
+        // 99          2            +   00
+        // 999         3            +   00
+        // 99.9        4 & < 100    +   0
+        // 999.9       5 & > 100    +   0
+        // 99.99       5
+        // 999.99      6
+        if( (preco.toString().length == 2) || (preco.toString().length == 3))
+        {
+            preco   =   preco.toString()    +   ".00";
+        }
+        else if( (preco.toString().length == 4 & preco < 100) || (preco.toString().length == 5 & preco > 100) )
+        {
+            preco   =   preco.toString()    +   "0";
+        }
 
-//  Recupera as Informações de um Dado Quarto
-router.get('/listaQuarto', function(req, res, next){
-    var query   = `SELECT * FROM Quartos WHERE ID=${req.query.ID}`;
-    req.getConnection( function( err, connection ){
-        var conn = connection.query( query, function(err, rows){
-            if( err )
-                res.json({ status:'ERROR', data: err });
-            else
-                res.json({ status:'OK', data: rows });
-        });
-        if( err )
-        res.json({ status:'ERROR', data: err });
-    });
-});
+        var dadosQuarto =   '<tr id="' + quarto.ID + '">' +
+                            '<td>' + quarto.ID + '</td>'  +
+                            '<td>' + quarto.Titulo + '</td>'  +
+                            '<td>' + quarto.QntCamas + '</td>'  +
+                            '<td>' + preco + '</td>'  +
+                            `<td>`      + 
+                            `<a data-toggle="modal" data-target="#info-modal" onClick="getRoomData(${quarto.ID}, fillFormRoom)">Info</a>` +
+                            `</td>`     +
+                            `</tr>`;
+        document.getElementById('result').innerHTML += dadosQuarto; //+ '<br><br>';
+    }
+}
 
-//  Edita Quarto
-router.post('/editaQuarto', function (req, res, next) {
-    var input = req.body;
-    var id    = req.query.ID;
-
-    req.getConnection(function (err, connection) {
-    var query = connection.query("UPDATE Quartos SET ? WHERE ID = ?", [input,id], function (err, rows) {
-            if (err)
-                res.json({ status: 'ERROR', data: + err });
-            else
-                res.json({ status: 'OK', data: 'Alterado com sucesso!' });
-            });
-    });
-});
-
-//  Insere Quarto
-router.post('/insere', function (req, res, next) {
-    var input = req.body;
-    req.getConnection(function (err, connection) {
-        var query = connection.query("INSERT INTO Quartos SET ? ", input, function (err, rows) {
-                if (err)
-                    res.json({ status: 'ERROR', data: + err });
+function    listarQuartos( callback )
+{
+    $(document).ready(function () {
+        $.ajax({    
+            url: '/quartos/listaQuartos',
+            dataType: 'json',
+            error: function (dados) {
+                    alert('Erro: ' + dados.data);
+                    },
+            success: function (dados) {
+                if (dados.status === 'ERRO')
+                    alert('Erro: ' + dados.data);
                 else
-                    res.json({ status: 'OK', data: 'Incluído com sucesso!' });
-                });
+                    callback(dados.data);
+            }
         });
-});
+    });
+}
 
+function    getRoomData( id, callback )
+{
+    $.ajax({
+        url: `/quartos/listaQuarto?ID=${id}`,
+        dataType:"json",
+        error: function (dados) {
+                                    alert('Erro: ' + dados.data);
+                                },
+        success: function (dados) {
+                                    if (dados.status === 'ERRO')
+                                        alert('Erro: ' + dados.data);
+                                    else
+                                        callback(dados);
+                                    }
+    });
+}
 
-module.exports = router;
+function    fillFormRoom( {status, data} )
+{
+    var elements    =   document.getElementsByClassName("form-control"),
+        btn_toggle  =   document.getElementById("btn_alterar"),
+        form        =   document.formQuarto,
+        precoAux,
+        i;
+    // ID, QntCamas, Titulo, Descricao, Preco
+    const   {   ID, QntCamas, Titulo, Descricao, Preco }    =  data[0];
+    precoAux   =   Preco;
+
+    //  PreSets
+    for( i = 0; i < elements.length; i++ )
+        elements[i].readOnly  = true;
+    btn_toggle.innerHTML    =   "Alterar";
+    btn_toggle.setAttribute('onClick',`alterarEstadoQuarto(${ID});`);
+
+    // 99          2            +   00
+    // 999         3            +   00
+    // 99.9        4 & < 100    +   0
+    // 999.9       5 & > 100    +   0
+    // 99.99       5
+    // 999.99      6
+    if( (precoAux.toString().length == 2) || (precoAux.toString().length == 3))
+    {
+        precoAux   =   precoAux.toString()    +   ".00";
+    }
+    else if( (precoAux.toString().length == 4 & Preco < 100) || (precoAux.toString().length == 5 & precoAux > 100) )
+    {
+        precoAux   =   precoAux.toString()    +   "0";
+    }
+    console.log(`Preco: ${Preco}, Len: ${Preco.toString().length}, PrecoAux: ${precoAux}`);
+
+    //  Fill Form
+    form.titulo.value       =   Titulo;
+    form.preco.value        =   precoAux;
+    form.qntCamas.value     =   QntCamas;
+    form.descricao.value    =   Descricao;
+}
+
+function    alterarEstadoQuarto( ID )
+{
+    var elements    =   document.getElementsByClassName("form-control"),
+        btn_toggle  =   document.getElementById("btn_alterar"),
+        i;
+
+    for( i = 0; i < elements.length; i++ )
+        elements[i].readOnly  = false;
+
+    if( elements[0].readOnly == false )
+    {
+        btn_toggle.innerHTML    =   "Submeter";
+        btn_toggle.setAttribute('onClick',`salvaQuarto(${ID});`);
+    }
+    else
+    {
+        btn_toggle.innerHTML    =   "Alterar";
+        btn_toggle.setAttribute('onClick',`alterarEstadoQuarto(${ID});`);
+    }
+}
+
+function salvaQuarto()
+{
+    var form    = document.formQuarto,
+        input   =   {   // ID , QntCamas, Titulo, Descricao, Preco
+            QntCamas:   form.qntCamas.value,
+            Titulo:     form.titulo.value,
+            Descricao:  form.descricao.value,
+            Preco:      form.preco.value
+        },
+        param = new URLSearchParams( window.location.search ),
+        urlAcao;
+        
+    if( arguments.length != 0 )
+    {   //  Alteração por Argumento
+        urlAcao =   `/quartos/editaQuarto?ID=${arguments[0]}`;
+    }
+    else
+    {   //  Inserção
+        urlAcao =   '/quartos/insere';
+    }
+
+    $.ajax({
+        url: urlAcao,
+        type: 'post',
+        data: input,
+        error: function (dados) {
+                                    alert('Erro: ' + dados.data);
+                                },
+        success: function (dados) {
+                                    if (dados.status === 'ERROR')
+                                        alert('Erro: ' + dados.data);
+                                    else
+                                    {
+                                        alert(dados.data);
+                                        window.location.reload();
+                                    }    
+                                    }
+    });
+}

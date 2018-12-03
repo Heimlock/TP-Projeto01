@@ -1,146 +1,141 @@
-var express = require('express');
-var router = express.Router();
-
-router.get('/lista', function (req, res, next) {
-    var query   =   "SELECT * FROM Estadia";
-    if (req.session.logado)
-    {
-        req.getConnection(function (err, connection) {
-            connection.query(query, function (err, rows) {
-                if (err)
-                    res.json({ status: 'ERRO', data: + err });
-                else
-                    res.json({ status: 'OK', data: rows });
-            });
-            if (err)
-                res.json({ status: 'ERRO', data: + err });
-        });
-    }
-    else
-    {
-        res.json({ status: 'SEMACESSO', data: 'Usuário precisa estar logado!' });
-    }
-});
 
 // COD, ID_Cliente, ID_Quarto, DataEntrada, PrevSaida, Motivo
-router.get('/listaReserva', function(req, res, next){
-    var query   =   `SELECT E.COD as COD, C.ID as ID_Cliente, E.ID_Quarto as ID_Quarto,`            + 
-                    ` E.DataEntrada as DataEntrada, E.PrevSaida as PrevSaida, E.Motivo as Motivo`   + 
-                    ` FROM Estadia E, Clientes C WHERE E.COD=${req.query.COD} AND E.ID_Cliente=C.ID`;
-    req.getConnection( function( err, connection ){
-        var conn = connection.query( query, function(err, rows){
-            if( err )
-                res.json({ status:'ERROR', data: err });
-            else
-                res.json({ status:'OK', data: rows });
-        });
-        if( err )
-        res.json({ status:'ERROR', data: err });
-    });
-});
 
-//  Listar Camas Disponiveis dentro do Intervalo DataIn e DataOUT
-router.post('/listaDisp', function(req, res, next){
-        var input       =   req.body;
-        // var querySTR    =   'SELECT C.ID as ID, C.Preco as Preco, CQ.ID_Quarto as Quarto FROM Camas C, CamasQuarto CQ WHERE C.ID = CQ.ID_Cama AND ' +
-        //                     'ID NOT IN (' +
-        //                     '   SELECT ID_Cama from Estadia where ID_Cama IN (' +
-        //                     '       SELECT ID_Cama FROM Estadia WHERE (' +
-        //                     '           ( Timestamp("' + input.dataIN + '") <= PrevSaida )    AND' +
-        //                     '           ( Timestamp("' + input.dataOUT + '") > DataEntrada )' +
-        //                     '       )' +
-        //                     '   )' +
-        //                     ')';
-        var querySTR        =   `SELECT * FROM Quartos where ID IN` +
-                                `(	SELECT ID_Quarto FROM Estadia` +
-                                `    WHERE ID_Quarto NOT IN ` +
-                                `    (	SELECT ID_Quarto FROM Estadia ` +
-                                `        WHERE ( ( Timestamp(${input.dataIN}) <= PrevSaida )` +
-                                `                AND` +
-                                `                ( Timestamp(${input.dataOUT}) >= DataEntrada ))` +
-                                `    ) GROUP by ID_Quarto` +
-                                `)`;
+function exibeReservas(reservas)
+{
+    var reserva, cpfSTR, cpf, dataIN, dataOUT, dadosReserva;
+    document.getElementById('result').innerHTML =   "";
 
-        req.getConnection( function( err, connection ){
-            var query = connection.query( querySTR, function(err, rows){
-                if( err )
-                    res.json({ status:'ERROR', data: err });
+    function innerSearch( id, clientes )
+    {
+        var i;
+        for( i = 0; i < clientes.length; i++ )
+            if( clientes[i].ID == id ) return i;
+        return -1;
+    }
+    listarCliente( 
+        function ( clientes )
+        {
+            for (var i = 0; i < reservas.length; i++)
+            {
+                reserva =   reservas[i];
+                // console.log(`Cliente[${i}] = ` + clientes[innerSearch(reserva.ID_Cliente, clientes)].Cpf );
+                cpf     =   clientes[innerSearch(reserva.ID_Cliente, clientes)].Cpf;
+                cpfSTR  =  ( cpf.slice(0,3) + '.' + cpf.slice(3,6) + '.' + cpf.slice(6,9) + '-' + cpf.slice(9,11) );
+                // COD, ID_Cliente, ID_Quarto, DataEntrada, PrevSaida, Motivo
+                dataIN  =  ( reserva.DataEntrada.slice(0,10).slice(8,10) + '/' + reserva.DataEntrada.slice(0,10).slice(5,7) + '/' + reserva.DataEntrada.slice(0,10).slice(0,4) );
+                dataOUT =  ( reserva.PrevSaida.slice(0,10).slice(8,10)   + '/' + reserva.PrevSaida.slice(0,10).slice(5,7)   + '/' + reserva.PrevSaida.slice(0,10).slice(0,4) );
+                dadosReserva =  `<tr id="${reserva.COD}">`          +
+                                `<td>${reserva.COD}</td>`           +
+                                `<td>${cpfSTR}</td>`    +
+                                `<td>${reserva.ID_Quarto}</td>`     +
+                                `<td>${dataIN}</td>`                +
+                                `<td>${dataOUT}</td>`               +
+                                `<td>${reserva.Motivo}</td>`        +
+                                `<td>`      + 
+                                `<a data-toggle="modal" data-target="#info-modal" onClick="getReservaData(${reserva.COD}, fillFormReserva)">Info</a>` +
+                                `</td>`     +
+                                `</tr>`;
+                document.getElementById('result').innerHTML += dadosReserva;
+            }
+        }
+     );
+}
+
+function    listarReservas( callback )
+{
+    $(document).ready(function () {
+        $.ajax({    
+            url: '/reservas/lista',
+            dataType: 'json',
+            error: function (dados) {
+                    alert('Erro: ' + dados.data);
+                    },
+            success: function (dados) {
+                if (dados.status === 'ERRO')
+                    alert('Erro: ' + dados.data);
                 else
-                    res.json({ status:'OK', data: rows });
-            });
-            if( err )
-            res.json({ status:'ERROR', data: err });
+                    if (dados.status === 'SEMACESSO')
+                    {
+                        alert('Erro: ' + dados.data);
+                        window.location.href = '/login.html';
+                    }
+                    else
+                    {
+                        callback(dados.data);
+                    }
+            }
         });
     });
+}
 
-//  Listar Estadia Atual de Um dado Cliente
-router.get('/estadiaCliente', function(req, res, next){
-    // var query   = `SELECT ID, Nome, Cpf, DataNasc, Sexo, Cep, Endereco, Cidade, Estado, Email, Telefone, Motivo FROM Clientes WHERE ID=${req.query.ID}`;
-    // var query   =   `SELECT E.COD as COD, E.ID_Cliente as Cliente, E.ID_Cama as Cama, CQ.ID_Quarto as Quarto, DataEntrada as DataIN, `  +
-    //                 `PrevSaida as DataOUT, Motivo FROM Estadia E, CamasQuarto CQ WHERE CQ.ID_Cama=E.ID_Cama AND E.ID_Cliente=${req.query.ID}`;
-    var query       =   `SELECT * FROM Estadia WHERE ID_Cliente=${req.query.ID}`;
-    req.getConnection( function( err, connection ){
-        var conn = connection.query( query, function(err, rows){
-            if( err )
-                res.json({ status:'ERROR', data: err });
-            else
-                res.json({ status:'OK', data: rows });
-        });
-        if( err )
-        res.json({ status:'ERROR', data: err });
+function    getReservaData( COD, callback )
+{
+    $.ajax({
+        url: `/reservas/listaReserva?COD=${COD}`,
+        dataType:"json",
+        error: function (dados) {
+                                    alert('Erro: ' + dados.data);
+                                },
+        success: function (dados) {
+                                    if (dados.status === 'ERRO')
+                                        alert('Erro: ' + dados.data);
+                                    else
+                                    callback(dados);
+                                    }
     });
-});
+}
 
-//	Listar Quartos de um Determinado Periodo
-router.post('/listarQuarto', function(req, res, next){
-    var input       =   req.body;
-    var querySTR    =   'SELECT I.url as Imagem, Q.ID as ID, Q.Titulo as Titulo, Q.Descricao as Descricao, Q.Preco as Preco FROM Imagens I, Quartos Q, ImagensQuarto IQ WHERE I.ID = IQ.ID_Imagem AND ' +
-                        'Q.ID = IQ.ID_Quarto AND' +
-                        'IQ.ID_Quarto IN (' +
-                        '   SELECT ID_Quarto FROM Estadia WHERE' +
-                                input.dataIN + '<= PrevSaida AND' +
-                                input.dataOUT + '>= DataEntrada)';
+function    fillFormReserva( {status, data} )
+{
+    console.log(data);
+}
 
-    req.getConnection( function( err, connection ){
-        var query = connection.query( querySTR, function(err, rows){
-            if( err )
-                res.json({ status:'ERROR', data: err });
-            else
-                res.json({ status:'OK', data: rows });
-        });
-        
-        if( err )
-            res.json({ status:'ERROR', data: err });
+//  Disponibilidade
+function    verifDisp()
+{
+    var form    =   document.formConsultaEstadia;
+    var input   =   {   dataIN:     form.dataIN.value,
+                        dataOUT:    form.dataOUT.value
+                    };
+    $.ajax({
+        url: '/reservas/listaDisp',
+        type: 'post',
+        data: input,
+        error: function (dados) {
+                    console.log("Erro: " + dados);
+                    alert('Erro0: ' + dados.data);
+                },
+        success: function (dados) {
+                if (dados.status === 'ERRO')
+                {    
+                    console.log("Sucesso Erro: " + dados);
+                    alert('Erro: ' + dados.data);
+                }
+                else
+                {
+                    // alert(dados.data);
+                    exibeCamas(dados.data);
+                    console.log(dados.data);
+                }
+        }
     });
-});
+}
 
-router.get('/recuperaInfoReserva', function (req, res, next){
-    var query = 'SELECT C.ID as ID, E.Motivo as Motivo FROM Clientes C, Estadia E WHERE C.Cpf=${req.query.cpf} AND E.ID_Cliente = C.ID';
-
-    req.getConnection( function( err, connection ){
-        var conn = connection.query( query, function(err, rows){
-            if( err )
-                res.json({ status:'ERROR', data: err });
-            else
-                res.json({ status:'OK', data});
+function    verifReserva( ID, callback )
+{
+    $.ajax({    
+        url: '/cliente/listaCliente?id=' + id,
+        dataType: 'json',
+        type: 'post',
+        error: function (dados) {
+                alert('Erro: ' + dados.data);
+                },
+        success: function (dados) 
+            {
+                if(dados.status === 'ERRO')
+                    alert('Erro: ' + dados.data);
+                callback(dados);
+            }
         });
-
-        if(err )
-            res.json({ status:'ERROR', data: err });
-    });
-});
-
-//	Inserir Nova Reserva
-router.post('/insereReserva', function (req, res, next) {
-    var input = req.body;
-    req.getConnection(function (err, connection) {
-        var query = connection.query("INSERT INTO Estadia SET ? ", input, function (err, rows) {
-            if (err)
-                res.json({ status: 'ERROR', data: + err });
-            else
-                res.json({ status: 'OK', data: 'Incluído com sucesso!' });
-        });
-    });
-});
-
-module.exports = router;
+}
