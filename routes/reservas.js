@@ -190,7 +190,7 @@ router.post('/findReserva', function(req, res, next){
         });
     });
 
-//  Listar Camas Disponiveis dentro do Intervalo DataIn e DataOUT
+//  Listar Quartos Disponiveis dentro do Intervalo DataIn e DataOUT
 router.post('/listaDisp', function(req, res, next){
         var input       =   req.body;
         var querySTR    = "SELECT * FROM Quartos " +

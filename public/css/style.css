@@ -2,7 +2,7 @@
 
 @Author: Themezinho
 @URL: http://www.themezinho.net
- 
+
 This file contains the styling for the actual theme, this
 is the file you need to edit to change the look of the
 theme.
@@ -28,7 +28,7 @@ theme.
 	16. BOOKING FORM
 	17. HIGHLIGHT ROOMS
 	18. INTRO
-	19. QUARTO INTRO 
+	19. QUARTO INTRO
 	20. FULL IMAGES
 	21. CORE VALUES
 	22. BOARD MEMBERS
@@ -110,7 +110,7 @@ body::-webkit-scrollbar-thumb {  background: #999;  outline: 1px solid slategrey
 
 
 
-/* CUSTOMIZED FANCYBOX */ 
+/* CUSTOMIZED FANCYBOX */
 .fancybox-overlay{ background: none; background-color:rgba(0,0,0,0.8);}
 .fancybox-opened .fancybox-skin{ box-shadow:none; border-radius:0; background:none;}
 .fancybox-skin{ box-shadow:none; border-radius:0; background:none; padding:0 !important; padding-top:40px !important;}
@@ -240,6 +240,7 @@ body::-webkit-scrollbar-thumb {  background: #999;  outline: 1px solid slategrey
 .booking-form .person label{ width: 100%; float: left; font-weight: 300; color: #9a7333; font-size: 12px; letter-spacing: 1px;}
 .booking-form .person input[type="text"]{ width: 100%; height: 50px; float: left; text-align: center; line-height: 30px; font-size: 70px; font-family: 'Playfair Display', serif; border:none; padding-bottom: 21px; background: transparent;}
 .booking-form button[type="submit"]{ height: 80px; padding: 0 20px; font-size: 20px; background: #9a7333; border:none; color: #fff; font-weight: 700;}
+.booking-form button[type="button"]{ height: 80px; padding: 0 20px; font-size: 20px; background: #9a7333; border:none; color: #fff; font-weight: 700;}
 
 
 
@@ -268,8 +269,8 @@ body::-webkit-scrollbar-thumb {  background: #999;  outline: 1px solid slategrey
 .highlight-rooms .room-box .room-details .room-button span { position: relative; display: inline-block;}
 .highlight-rooms .room-box .room-details .room-button span:before {position: absolute;top: 100%; content: attr(data-hover); }
 .highlight-rooms .room-box .room-details .room-button span:before {-webkit-transform: translate3d(0,0,0);-moz-transform: translate3d(0,0,0);transform: translate3d(0,0,0);}
-.highlight-rooms .room-box .room-details .room-button:hover span{-webkit-transform: translateY(-100%);-moz-transform: translateY(-100%);transform: translateY(-100%); color: #fff;} 
-.highlight-rooms .center { z-index: 2;} 
+.highlight-rooms .room-box .room-details .room-button:hover span{-webkit-transform: translateY(-100%);-moz-transform: translateY(-100%);transform: translateY(-100%); color: #fff;}
+.highlight-rooms .center { z-index: 2;}
 .highlight-rooms .center .room-box{width: 120%; margin-left: -10%; margin-top: -50px; box-shadow: 10px 10px 30px rgba(0,0,0,0.15);}
 .highlight-rooms .center .room-box img{opacity: 1;}
 .highlight-rooms .center .room-box .room-details{ height: auto; margin-top: -186px; background: #1c1b21; padding: 20px 25px;}
@@ -684,7 +685,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', e
 
 
 /* RESPONSIVE FOR TABLETS */
-@media only screen and (max-width: 989px), only screen and (max-device-width: 989px) 
+@media only screen and (max-width: 989px), only screen and (max-device-width: 989px)
 	{
 		body{padding-left: 60px;}
 		section{background-position:0 !important; background-attachment:fixed;}
@@ -727,7 +728,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', e
 
 /* RESPONSIVE FOR MOBILES */
 @media only screen and (max-width: 767px), only screen and (max-device-width: 767px) {
-	
+
 	.intro h2{font-size: 50px;}
 	.highlight-rooms h2{font-size: 30px; margin-bottom: 50px;}
 	.highlight-rooms .center .room-box{ width: 100%; margin-left: 0;}
