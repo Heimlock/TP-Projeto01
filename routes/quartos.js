@@ -5,7 +5,6 @@ var router = express.Router();
 //  Listar Todos os Quartos
 router.get('/listaQuartos', function(req, res, next){
     req.getConnection( function( err, connection ){
-        // var query = connection.query( "SELECT C.ID as ID, C.Preco as Preco, CQ.ID_Quarto as Quarto FROM Camas C, CamasQuarto CQ WHERE C.ID = CQ.ID_Cama", function(err, rows){
         var query = connection.query( "SELECT * FROM Quartos", function(err, rows){
             if( err )
                 res.json({ status:'ERROR', data: err });

@@ -90,7 +90,6 @@ function    listarReservasAtivas( callback )
                     }
                     else
                     {
-                        // console.log(dados);
                         callback(dados.data);
                     }
             }
@@ -496,7 +495,6 @@ function    fillInvoice()
                   dataIN      =   ( data[0].Entrada.slice(0,10).slice(8,10) + '/' + data[0].Entrada.slice(0,10).slice(5,7) + '/' + data[0].Entrada.slice(0,10).slice(0,4) );
                   dataOUT     =   ( data[0].Saida.slice(0,10).slice(8,10) + '/' + data[0].Saida.slice(0,10).slice(5,7) + '/' + data[0].Saida.slice(0,10).slice(0,4) );
                   hojeSTR     =   ( moment().format().slice(0,10).slice(8,10)   + '/' + moment().format().slice(0,10).slice(5,7)   + '/' + moment().format().slice(0,10).slice(0,4) );
-                  // custo       =   parseFloat(custo).toFixed(2);
                   valorTaxa   =   (custo/100)*10;
                   taxaSTR     =   parseFloat(valorTaxa).toFixed(2);
                   valorTotal  =   (valorTaxa + custo);
@@ -562,14 +560,11 @@ function    verifDisp()
         success: function (dados) {
                 if (dados.status === 'ERRO')
                 {
-                    // console.log("Erro: " + dados);
                     alert('Erro: ' + dados.data);
                 }
                 else
                 {
-                    // alert(dados.data);
                     exibeCamas(dados.data);
-                    // console.log(dados.data);
                 }
         }
     });

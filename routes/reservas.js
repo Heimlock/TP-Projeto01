@@ -110,8 +110,6 @@ router.get('/custoEstadia', function(req, res, next){
 
 router.post('/prevCusto', function(req, res, next){
     var input       =   req.body;
-    // var query       =   `SELECT	ROUND((CAST(${input.qntCamas} AS SIGNED) * Preco * (TIMESTAMPDIFF(DAY, TIMESTAMP('${input.dataIN}'), TIMESTAMP('${input.dataOUT}')))), 2) as Custo `
-    //                     `FROM Quartos WHERE ID=${input.ID_Quarto}`;
     var query       =   `SELECT	ROUND((CAST(${input.qntCamas} AS SIGNED) * Preco * (TIMESTAMPDIFF(DAY, TIMESTAMP('${input.dataIN}'), TIMESTAMP('${input.dataOUT}')))), 2) as Custo ` +
                         `FROM Quartos ` +
                         `WHERE ID=${input.ID_Quarto}`;
@@ -179,17 +177,6 @@ router.post('/findReserva', function(req, res, next){
 //  Listar Camas Disponiveis dentro do Intervalo DataIn e DataOUT
 router.post('/listaDisp', function(req, res, next){
         var input       =   req.body;
-        // var querySTR    =   `SELECT * FROM Quartos where ID IN (	`                     +
-        //                     `	SELECT ID_Quarto FROM Estadia `                           +
-        //                     `    WHERE ID_Quarto NOT IN 		( `                         +
-        //                     `			SELECT ID_Quarto FROM Estadia `                       +
-        //                     `			WHERE ( `                                             +
-        //                     `					( Timestamp('${input.dataIN}') <  PrevSaida ) `   +
-        //                     `					AND `                                             +
-        //                     `					( Timestamp('${input.dataOUT}') >= DataEntrada )` +
-        //                     `			) `                                                   +
-        //                     `		) `                                                     +
-        //                     `) GROUP by ID`;
         var querySTR    = "SELECT * FROM Quartos " +
                           "WHERE ID IN " +
                           "(   SELECT ID_Quarto FROM Estadia " +
