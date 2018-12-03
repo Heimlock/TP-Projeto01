@@ -29,6 +29,22 @@ router.post('/fecharReserva', function(req, res, next){
 });
 
 
+router.get('/recuperaInfoReserva', function (req, res, next){
+    var query = 'SELECT C.ID as ID, E.Motivo as Motivo FROM Clientes C, Estadia E WHERE C.Cpf=${req.query.cpf} AND E.ID_Cliente = C.ID';
+
+    req.getConnection( function( err, connection ){
+        var conn = connection.query( query, function(err, rows){
+            if( err )
+                res.json({ status:'ERROR', data: err });
+            else
+                res.json({ status:'OK', data});
+        });
+
+        if(err )
+            res.json({ status:'ERROR', data: err });
+    });
+});
+
 router.get('/lista', function (req, res, next) {
     var query   =   "SELECT * FROM Estadia";
     if (req.session.logado)
@@ -174,7 +190,7 @@ router.post('/findReserva', function(req, res, next){
         });
     });
 
-//  Listar Camas Disponiveis dentro do Intervalo DataIn e DataOUT
+//  Listar Quartos Disponiveis dentro do Intervalo DataIn e DataOUT
 router.post('/listaDisp', function(req, res, next){
         var input       =   req.body;
         var querySTR    = "SELECT * FROM Quartos " +

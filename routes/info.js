@@ -51,15 +51,15 @@ router.post('/totalNumbers', function (req, res, next){
 
 router.get('/lotacaoQuarto', function(req, res, next){
     var query   = `SELECT Q.qntCamas as qntCamas, E.lotacao as lotacao `  +
-                  `FROM Clientes C, (`                                    +
-                  ` SELECT COUNT(*) FROM Estadia `                        +
+                  `FROM Quartos Q, (`                                     +
+                  ` SELECT COUNT(*) as lotacao FROM Estadia `             +
                   ` WHERE ( `                                             +
                   `      ( Timestamp('current_date()') <  PrevSaida ) `   +
                   `       AND `                                           +
                   `       ( Timestamp('current_date()') >= DataEntrada )` +
                   `       AND ID_Quarto=${req.query.ID_Quarto}) `         +
                   `) E `                                                  +
-                  `WHERE C.ID=${req.query.ID_Quarto}`;
+                  `WHERE Q.ID=${req.query.ID_Quarto}`;
 
     req.getConnection( function( err, connection ){
         var conn = connection.query( query, function(err, rows){

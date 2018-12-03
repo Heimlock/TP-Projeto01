@@ -139,25 +139,26 @@ function    fillFormReserva( {status, data} )
     form.dataIN.value   =   DataEntrada.slice(0,10);
     form.dataOUT.value  =   PrevSaida.slice(0,10);
     form.motivo.value   =   motivoSTR;
-    calculaCusto(Cpf,
-      function({status, data})
-      {
-        custo   = data[0].Custo;
-        if( custo == 0 )
-        {
-          custo     =   "0000";
-        }
-        else if( (custo.toString().length == 2) || (custo.toString().length == 3))
-        {
-            custo   =   custo.toString()    +   ".00";
-        }
-        else if( (custo.toString().length == 4 & custo < 100) || (custo.toString().length == 5 & custo > 100) )
-        {
-            custo   =   custo.toString()    +   "0";
-        }
-        form.preco.value   =   custo;
-      }
-    );
+    prevCusto();
+    // calculaCusto(Cpf,
+    //   function({status, data})
+    //   {
+    //     custo   = data[0].Custo;
+    //     if( custo == 0 )
+    //     {
+    //       custo     =   "0000";
+    //     }
+    //     else if( (custo.toString().length == 2) || (custo.toString().length == 3))
+    //     {
+    //         custo   =   custo.toString()    +   ".00";
+    //     }
+    //     else if( (custo.toString().length == 4 & custo < 100) || (custo.toString().length == 5 & custo > 100) )
+    //     {
+    //         custo   =   custo.toString()    +   "0";
+    //     }
+    //     form.preco.value   =   custo;
+    //   }
+    // );
     btnfillInvoice.href = './fecharReserva.html?id='+COD;
 }
 
@@ -388,22 +389,44 @@ function    novaReserva()
     {
       input.ID_Cliente  = data[0].ID;
       // console.log(input);
+
       $.ajax({
-          url: '/reservas/novaReserva',
-          type: 'post',
-          data: input,
-          error: function (dados) {
-                                      alert('0Erro: ' + dados.data);
-                                  },
-          success: function (dados) {
-                                      if (dados.status === 'ERROR')
-                                          alert('1Erro: ' + dados.data);
-                                      else
-                                      {
-                                          alert(dados.data);
-                                          window.location.href = "./listarReservas.html";
-                                      }
-                                    }
+          url: `/info/lotacaoQuarto?ID_Quarto=${input.ID_Quarto}`,
+          dataType: 'json',
+          error:      function (dados) {
+                          alert('Erro: ' + dados.data);
+                      },
+          success:    function ({status, data}){
+                          if(status === 'ERRO')
+                              alert('Erro: ' + data);
+                          else
+                          {
+                            if( data[0].qntCamas > (data[0].lotacao + input.qntCamas) )
+                            {
+                              $.ajax({
+                                  url: '/reservas/novaReserva',
+                                  type: 'post',
+                                  data: input,
+                                  error: function (dados) {
+                                                              alert('Erro: ' + dados.data);
+                                                          },
+                                  success: function (dados) {
+                                                              if (dados.status === 'ERROR')
+                                                                  alert('Erro: ' + dados.data);
+                                                              else
+                                                              {
+                                                                  alert(dados.data);
+                                                                  window.location.href = "./index.html";
+                                                              }
+                                                            }
+                              });
+                            }
+                            else
+                            {
+                              alert('Erro: Lotação Máxima Excedida!\nFavor Diminuia a quantidade de camas ou troque de Quarto.');
+                            }
+                          }
+                      }
       });
     }
   )
@@ -547,8 +570,8 @@ function    verifDisp()
                         dataOUT:    form.dataOUT.value
                     };
 
-    if( dataOUT < dataIN ) callback();
-
+    if( dataOUT < dataIN ) return;
+    console.log(input);
     $.ajax({
         url: '/reservas/listaDisp',
         type: 'post',
@@ -581,14 +604,14 @@ function    consultaDisp( callback )
     callback();
     return;
   }
-
+  console.log(input);
   $.ajax({
       url: '/reservas/listaDisp',
       type: 'post',
       data: input,
       error: function (dados) {
                   console.log("Erro: " + dados);
-                  alert('Erro0: ' + dados.data);
+                  alert('Erro: ' + dados.data);
               },
       success: function (dados) {
               if (dados.status === 'ERRO')

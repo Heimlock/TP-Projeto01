@@ -82,7 +82,7 @@
                           <input id="senha" type="password" class="form-control input-lg" placeholder="Senha" required />
                           <input class="btn btn-lg btn-primary btn-block" type="button" value="ENTRAR" name="bt_login" onClick="loginUsuario();">
                           <div>
-                              <a href="#"> Nova Conta </a>
+                              <a href="./formCliente.html"> Nova Conta </a>
                               <br>
                               <a href="#"> Esqueceu a Senha? </a>
                           </div>
@@ -220,6 +220,10 @@
                           if( status === 'OK' )
                           {
                             document.getElementById("menu").innerHTML  += `<li><a href="./admin/index.html">ADMIN PANEL</a></li>`;
+                          }
+                          else if( status === "SEM_ACESSO" )
+                          {
+                            document.getElementById("menu").innerHTML  += `<li><a href="./reservasCliente.html">RESERVAS</a></li>`;
                           }
                         }
                       );

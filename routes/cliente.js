@@ -90,4 +90,21 @@ router.post('/altera', function (req, res, next) {
       });
 });
 
+router.get('/listarReserva', function(req, res, next){
+    var query   =   `SELECT E.COD as COD, E.ID_Quarto as ID_Quarto,` + 
+                    ` E.DataEntrada as DataEntrada, E.PrevSaida as PrevSaida, E.Motivo as Motivo`   + 
+                    ` FROM Estadia E, Clientes C WHERE C.Cpf=${req.query.CPF} AND E.ID_Cliente = C.ID`;
+                    
+    req.getConnection( function( err, connection ){
+        var conn = connection.query( query, function(err, rows){
+            if( err )
+                res.json({ status:'ERROR', data: err });
+            else
+                res.json({ status:'OK', data: rows });
+        });
+        if( err )
+        res.json({ status:'ERROR', data: err });
+    });
+});
+
 module.exports = router;
