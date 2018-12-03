@@ -246,50 +246,8 @@
           <div class="col-md-8">
             <div class="owl-carousel">
 
-              <div class="owl-item">
-                <figure class="room-box"> <img src="images/highlight-room1.jpg" alt="Image">
-                  <figcaption class="room-details">
-                    <h3 class="room-name">Quarto1</h3>
-                    <small class="room-desc">Subtitulo1</small> <span class="room-price">R$299<small>,00</small> <span>POR NOITE</span></span> <a href="room-detail.html" class="room-button"><span data-hover="RESERVE JÁ">RESERVE JÁ</span></a>
-                  </figcaption> <!-- end room-details -->
-                </figure> <!-- end room-box -->
-              </div> <!-- end owl-item -->
+              <div id="ExibirCarrossel"></div>
 
-              <div class="owl-item">
-                <figure class="room-box"> <img src="images/highlight-room2.jpg" alt="Image">
-                  <figcaption class="room-details">
-                    <h3 class="room-name">Quarto2</h3>
-                    <small class="room-desc">Subtitulo2</small> <span class="room-price">R$299<small>,00</small> <span>POR NOITE</span></span> <a href="room-detail.html" class="room-button"><span data-hover="RESERVE JÁ">RESERVE JÁ</span></a>
-                  </figcaption> <!-- end room-details -->
-                </figure> <!-- end room-box -->
-              </div> <!-- end owl-item -->
-
-              <div class="owl-item">
-                <figure class="room-box"> <img src="images/highlight-room3.jpg" alt="Image">
-                  <figcaption class="room-details">
-                    <h3 class="room-name">Quarto3</h3>
-                    <small class="room-desc">Subtitulo3</small> <span class="room-price">R$299<small>,00</small> <span>POR NOITE</span></span> <a href="room-detail.html" class="room-button"><span data-hover="RESERVE JÁ">RESERVE JÁ</span></a>
-                  </figcaption> <!-- end room-details -->
-                </figure> <!-- end room-box -->
-              </div> <!-- end owl-item -->
-
-              <div class="owl-item">
-                <figure class="room-box"> <img src="images/highlight-room4.jpg" alt="Image">
-                  <figcaption class="room-details">
-                    <h3 class="room-name">Quarto4</h3>
-                    <small class="room-desc">Subtitulo4</small> <span class="room-price">R$299<small>,00</small> <span>POR NOITE</span></span> <a href="room-detail.html" class="room-button"><span data-hover="RESERVE JÁ">RESERVE JÁ</span></a>
-                  </figcaption> <!-- end room-details -->
-                </figure> <!-- end room-box -->
-              </div> <!-- end owl-item -->
-
-              <div class="owl-item">
-                <figure class="room-box"> <img src="images/highlight-room5.jpg" alt="Image">
-                  <figcaption class="room-details">
-                    <h3 class="room-name">Quarto5</h3>
-                    <small class="room-desc">Subtitulo5</small> <span class="room-price">R$299<small>,00</small> <span>POR NOITE</span></span> <a href="room-detail.html" class="room-button"><span data-hover="RESERVE JÁ">RESERVE JÁ</span></a>
-                  </figcaption> <!-- end room-details -->
-                </figure> <!-- end room-box -->
-              </div> <!-- end owl-item -->
             </div> <!-- end owl-carousel -->
           </div> <!-- end col-8 -->
         </div> <!-- end row -->
@@ -362,10 +320,11 @@
     </footer> <!-- end footer -->
 
     <!-- JS FILES -->
+    <script src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="./javascripts/quartos.js"></script>
     <script type="text/javascript" src="./javascripts/acesso.js"></script>
     <script type="text/javascript" src="./javascripts/gerencia.js"></script>
     <script type="text/javascript" src="./javascripts/reservarQuarto.js"></script>
-    <script src="js/jquery.min.js"></script>
     <script type="text/javascript">
       (function($) {
         $(window).load(function(){
@@ -373,6 +332,7 @@
         });
       })(jQuery)
       $(document).ready(function () {
+          listarQuartos(exibeCarrossel),
           verifyStatus(
               function( dados )
               {
