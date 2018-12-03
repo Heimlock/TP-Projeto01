@@ -401,7 +401,7 @@ function    novaReserva()
                               alert('Erro: ' + data);
                           else
                           {
-                            if( data[0].qntCamas > (data[0].lotacao + input.qntCamas) )
+                            if( data[0].qntCamas >= (data[0].lotacao + input.qntCamas) )
                             {
                               $.ajax({
                                   url: '/reservas/novaReserva',
@@ -479,7 +479,7 @@ function    fillInvoice()
     var   reserva, cliente, custo, dias;
     var   urlParams = new URLSearchParams(window.location.search);
 
-    if( urlParams.has('id') )
+    if( urlParams.has('id') == true )
     {
         COD =  urlParams.get('id');
         console.log(COD);
@@ -495,10 +495,17 @@ function    fillInvoice()
       document.getElementById('invoice').style = "";
     }
 
+    console.log(COD);
       getReservaData(
         COD,
         function( {status, data} )
         {
+            if( data.length == 0 )
+            {
+                alert("Erro: Reserva não Ativa");
+                document.getElementById('invoice').style = "display:none";
+                return;
+            }
           reserva   =   data[0];
           getClientData(
             reserva.ID_Cliente,
@@ -509,6 +516,7 @@ function    fillInvoice()
                 cliente.Cpf,
                 function( {status, data} )
                 {
+                    console.log(data);
                   custo   = data[0].Custo;
                   dias    = data[0].Dias;
                   //  PreSets

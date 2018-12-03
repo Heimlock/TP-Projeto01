@@ -14,7 +14,7 @@ function salvarSessao()
    window.location.href = './quartos_disponiveis.html';
 }
 
-function listarQuartos()
+function listarQuartosDisponiveis()
 {
     var entrada = window.sessionStorage.getItem('checkin'),
         saida   = window.sessionStorage.getItem('checkout');

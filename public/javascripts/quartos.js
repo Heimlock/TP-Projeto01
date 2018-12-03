@@ -1,3 +1,70 @@
+function exibeCarrossel(quartos){
+    var quarto, preco;
+    document.getElementById('ExibirCarrossel').innerHTML = "";
+    
+    for (var i = 0; i <  quartos.length; i++)
+    {
+        quarto  = quartos[i];
+        preco   = parseFloat(quarto.Preco).toFixed(2);
+
+        var dadosQuarto =   '<div class="owl-item">'+
+                                '<figure class="room-box">'+ 
+                                    '<img src="images/highlight-room'+quarto.ID+'.jpg" alt="Image">'+
+                                    '<figcaption class="room-details">'+
+                                        '<h3 class="room-name">'+quarto.Titulo+'</h3>'+
+                                        '<small class="room-desc">'+quarto.Descricao+'</small>'+ 
+                                        '<span class="room-price">'+preco+'<span>POR NOITE</span></span>'+ 
+                                        '<a href="room-detail.html" class="room-button"><span data-hover="RESERVE JÁ">RESERVE JÁ</span></a>'+ 
+                                    '</figcaption> <!-- end room-details -->'+ 
+                                '</figure> <!-- end room-box -->'+ 
+                            '</div> <!-- end owl-item -->';
+                                
+        document.getElementById('ExibirCarrossel').innerHTML += dadosQuarto; //+ '<br><br>';
+    }
+}
+
+
+function tipoQuartos(quartos)
+{
+    var quarto, preco;
+    document.getElementById('TiposDeQuartos').innerHTML = "";
+    
+    for (var i = 0; i <  quartos.length; i++)
+    {
+        quarto  = quartos[i];
+        preco   = parseFloat(quarto.Preco).toFixed(2);
+
+        if (i%2 === 0){
+            var dadosQuarto =   '<div class="row"></div>'+
+                                    '<div class="col-md-5 col-md-offset-1 col-sm-6 col-xs-12">'+
+                                        '<div class="promo-box">'+
+                                            '<figure class="image"><img src="images/promo'+quarto.ID+'.jpg" alt="Image"></figure>'+
+                                            '<div class="content">'+
+                                                '<small>'+quarto.QntCamas+' Camas</small>'+
+                                                '<h4>'+quarto.Titulo+'</h4>'+
+                                                '<p>'+quarto.Descricao+'</p>'+
+                                                '<span>'+preco+' Por Noite</span>'+
+                                            '</div> <!-- end content -->'+
+                                        '</div> <!-- end promo-box -->'+
+                                    '</div> <!-- end col-5 -->';
+        }
+        else{
+            var dadosQuarto =   '<div class="col-md-5 col-sm-6 col-xs-12">'+
+                                    '<div class="promo-box">'+
+                                        '<figure class="image"><img src="images/promo'+quarto.ID+'.jpg" alt="Image"></figure>'+
+                                        '<div class="content">'+
+                                            '<small>'+quarto.QntCamas+' Camas</small>'+
+                                            '<h4>'+quarto.Titulo+'</h4>'+
+                                            '<p>'+quarto.Descricao+'</p>'+
+                                            '<span>'+preco+' Por Noite</span>'+
+                                        '</div> <!-- end content -->'+
+                                    '</div> <!-- end promo-box -->'+
+                                '</div> <!-- end col-5 -->'+
+                            '</div> <!-- end row -->';
+        }
+        document.getElementById('TiposDeQuartos').innerHTML += dadosQuarto; //+ '<br><br>';
+    }
+}
 
 // ID , QntCamas, Titulo, Descricao, Preco
 function exibeQuartos( quartos )
