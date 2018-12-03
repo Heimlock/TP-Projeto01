@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Reservas do Cliente</title>
+
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="./admin/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./admin/bower_components/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="./admin/bower_components/Ionicons/css/ionicons.min.css">
+    <link rel="stylesheet" href="./admin/dist/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="./admin/dist/css/skins/skin-blue.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="dist/js/adminlte.min.js"></script>
+    <script src="https://rawgit.com/RobinHerbots/Inputmask/3.x/dist/jquery.inputmask.bundle.js"></script>
+    <script type="text/javascript" src="../javascripts/moment.js"></script>
+
+    <script type="text/javascript" src="./javascripts/acesso.js"></script>
+    <script type="text/javascript" src="./javascripts/cliente.js"></script>
+    <script type="text/javascript" src="./javascripts/gerencia.js"></script>
+    <script type="text/javascript" src="./javascripts/info.js"></script>
+    <script type="text/javascript" src="./javascripts/reservas.js"></script>
+    <script type="text/javascript" src="./javascripts/quartos.js"></script>
+    <script type="text/javascript" src="./javascripts/reservaCliente.js"></script> 
+    
+    <script>
+      $(document).ready(
+        getUserData( function( dados ){
+          console.log(dados);
+          document.getElementById("nome_cliente").innerHTML = dados.data.Nome;
+        }),
+        listarReservas(exibeReservas)
+      );
+    </script>
+  </head>
+
+  <body class = "hold-transition skin-blue sidebar-mini">
+    <div class = "wrapper">
+      <header class = "main-header">
+        <a href="index.html" class="logo">
+          <span class="logo-lg"><b>Client</b> Panel</span>
+        </a>
+
+        <nav class="navbar navbar-static-top" role="navigation">
+          <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+              <li>
+                <a onClick="logoutUsuario();"><i class="glyphicon glyphicon-log-out"></i></a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </header>
+
+      <aside class="main-sidebar">
+        <section class="sidebar">
+          <div class="user-panel">
+              <div class="pull-left info">
+                <p id="nome_cliente"></p>
+            </div>
+          </div>
+
+          <ul class="sidebar-menu" data-widget="tree">
+            <li class="treeview active">
+              <a href="#"><i class="fa fa-calendar-check-o"></i> <span>Reservas</span>
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+              </a>
+              
+              <ul class="treeview-menu">
+                <li class="active"><a href="./reservasCliente.html">Suas Reservas</a></li>
+                <li><a href="./novaReserva.html">Nova Reserva</a></li>
+                <li><a href="./fecharReserva.html">Fechar Reserva</a></li>
+              </ul>
+            </li>
+        
+            <li ><a onClick="logoutUsuario();"><i class="fa fa-sign-out"></i> <span>LogOut</span></a></li>
+          </ul>
+        </section>
+      </aside>
+
+      <div class="content-wrapper">
+        <section class="content-header">
+          <h1>Suas Reservas</h1>
+          <ol class="breadcrumb">
+            <li><i class="fa fa-calendar-check-o"></i> Reservas</li>
+            <li class="active">Suas Reservas</li>
+          </ol>
+        </section>
+
+        <section class="content container-fluid">
+          <div class="modal fade" id="info-modal" role="dialog" aria-labelledby="largeModal" >
+            <div class="modal-dialog">
+              <div class="modal-content border">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Informações da Reserva</h4>
+                </div>
+
+                <div class="modal-body">
+                  <div class="row">
+                      <form role="form" name="formReserva"  method="post">
+                          <div class="box-body">
+                            <div class="form-row">
+                                <div class="form-group col-md-9">
+                                    <label for="nome">Nome</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                        <input id="nome" type="text" class="form-control" maxlength="80" readOnly>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group col-md-3">
+                                    <label for="cpf">CPF</label>
+                                    <div class="input-group">
+                                        <input id="cpf" class="form-control" type="text" readOnly>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                              <div class="form-group col-md-3">
+                                  <label for="numQuarto">Quarto</label>
+                                  <div class="input-group">
+                                      <span class="input-group-addon"><i class="glyphicon glyphicon-bed"></i></span>
+                                      <input id="numQuarto" type="text" class="form-control" readOnly>
+                                  </div>
+                              </div>
+
+                              <div class="form-group col-md-6">
+                                  <label for="titulo">Titulo</label>
+                                  <div class="input-group">
+                                      <span class="input-group-addon"><i class="glyphicon glyphicon-bed"></i></span>
+                                      <input id="titulo" type="text" class="form-control" readOnly>
+                                  </div>
+                              </div>
+
+                              <div class="form-group col-md-3">
+                                  <label for="qntCamas">Número de Camas</label>
+                                  <div class="input-group">
+                                      <span class="input-group-addon"><i class="glyphicon glyphicon-bed"></i></span>
+                                      <input id="qntCamas" type="text" class="form-control" readOnly>
+                                  </div>
+                              </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="dataIN">Chegada</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-calendar-check-o"></i></span>
+                                        <input id="dataIN" type="date" class="form-control" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="dataOUT">Previsão de Saída</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-calendar-times-o"></i></span>
+                                        <input id="dataOUT" type="date" class="form-control" readonly>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                              <div class="form-group col-md-6">
+                                  <label for="preco">Preço</label>
+                                  <div class="input-group">
+                                      <span class="input-group-addon"><i class="glyphicon glyphicon-usd"></i></span>
+                                      <input id="preco" type="text" class="form-control" readOnly>
+                                  </div>
+                              </div>
+
+                              <div class="form-group col-md-6">
+                                  <label for="motivo">Motivo</label>
+                                  <input id="motivo" class="form-control" type="text" readonly>
+                              </div>
+                            </div>
+                          </div>
+                      </form>
+                  </div>
+                </div>
+
+                <div class="modal-footer">
+                  <a id='finalizarReserva' class="btn btn-primary" href='#' role="button">Finalizar Reserva</a>
+                  <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
+                </div>
+              </div>
+            </div>
+
+            <script id="inputMask">
+                $("input[id*='cpf']").inputmask({
+                  mask: ['999.999.999-99'],
+                  keepStatic: true
+                });
+                $("#telefone").inputmask({
+                  mask: ["(99) 9999-9999", "(99) 99999-9999", ],
+                  keepStatic: true
+                });
+              $("#preco").inputmask({
+                mask: ["99.99", "999.99", "9999.99", ],
+                keepStatic: true
+              });
+            </script>
+          </div>
+
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>COD</th>
+                <th>Quarto</th>
+                <th>Entrada</th>
+                <th>Saída</th>
+                <th>Número de Camas</th>
+                <th>Motivo</th>
+                <th>Ação</th>
+              </tr>
+            </thead>
+            
+            <tbody id = "resultado"></tbody>
+          </table>
+        </section>
+      </div>
+
+      <footer class="main-footer">
+        <strong>Copyright &copy; 2018 <a href="../index.html">Hostel Black Onyx</a>.</strong> Todos os Direitos Reservados.
+      </footer>
+    </div>
+  </body>
+</html>
